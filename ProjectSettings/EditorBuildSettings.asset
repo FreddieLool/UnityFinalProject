@@ -4,20 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-<<<<<<< Updated upstream
-  - enabled: 1
-    path: Assets/Scenes/Main Menu.unity
-    guid: 3fc8acdd13e6c734bafef6554d6fdbcd
-  - enabled: 1
-    path: Assets/Scenes/GamePlay.unity
-    guid: 52ee85ef6b2c2b244ac6a35986e6620a
+  m_Scenes: []
   m_configObjects: {}
-=======
-  m_configObjects:
-    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 2bdedad39eecd414bab40bd1bd7721bb, type: 2}
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 6400a6ac59d5c8c45bb0ef56e97991ab, type: 2}
->>>>>>> Stashed changes

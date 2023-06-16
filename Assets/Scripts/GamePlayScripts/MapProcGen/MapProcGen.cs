@@ -2,42 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.Diagnostics;
 
 
 public class MapProcGen : MonoBehaviour
 {
     private bool[,] _mapSolidsArr;
-    private int _mapWidth = 20, _mapHeight = 20 , _objAmount = 75 , _tries = 0 , _limit = 500 ,
-        _rndX , _rndY;
+    private int 
+        _mapWidth = 35,
+        _mapHeight = 35,
+        _mapObjAmount = 255,
+        _enemyUnitAmount = 1,
+        _tries = 0,
+        _limit = 333333,
+        _rndX, _rndY,
+        _enemySpawnMill = 500,
+        _enemyMaxAmount = 20;
 
+    public static int CurrentEnemyAmount { get; private set; }
 
-    
-
+    private Stopwatch _enemySpawnTimer = new Stopwatch();
 
     private void Start()
     {
         _mapSolidsArr = new bool[_mapWidth, _mapHeight];
 
-        MapGeneration();
+        // GENERATING MAP OBJECTS :
+        GenerateSomething(OBJ_TAG.MAP_OBJ, _mapObjAmount);
     }
 
-    private void MapGeneration()
+    private void FixedUpdate()
     {
-        for(int i = 0; i < _objAmount ; i++)
+        if(CurrentEnemyAmount <= _enemyMaxAmount && !_enemySpawnTimer.IsRunning 
+            || _enemySpawnTimer.ElapsedMilliseconds >= _enemySpawnMill)
+        {
+            GenerateSomething(OBJ_TAG.UNIT, _enemyUnitAmount);
+            CurrentEnemyAmount += _enemyUnitAmount;
+            _enemySpawnTimer.Restart();
+        }
+    }
+
+    private void GenerateSomething(OBJ_TAG objTag , int Amount)
+    {
+        for (int i = 0; i < Amount; i++)
         {
             ApplyRandomPos();
-            GameObject randomPrfb = GetRandomPrefab();
+            GameObject randomPrfb = GetRandomPrefab(objTag);
 
-            if(IsGoodGenerationHelper(randomPrfb))
+            if (IsGoodGenerationHelper(randomPrfb))
             {
                 AddPrefabToMap(randomPrfb);
+                _tries = 0;
             }
             else
             {
-                i--;
                 _tries++;
-                if(_tries >= _limit)
+                if (_tries >= _limit)
                 {
+                    _tries = 0;
                     return;
                 }
             }
@@ -47,7 +69,7 @@ public class MapProcGen : MonoBehaviour
 
     private bool IsGoodGenerationHelper(GameObject randomPrfb)
     {
-        List<Vector2> v2List = ProcGen.PrefabSizeDic[randomPrfb.name];
+        List<Vector2> v2List = new List<Vector2>(ProcGen.PrefabSizeDic[randomPrfb.name]);
         int prefabSize = v2List.Count;
         Vector2 v2 = ProcGen.PrefabSizeDic[randomPrfb.name].ToArray()[0];
         int x = (int)v2.x + _rndX;
@@ -59,10 +81,9 @@ public class MapProcGen : MonoBehaviour
         }
 
         if (prefabSize <= 1)
-        {    
+        {
             return IsGoodTilePlacement(x, y, 0, 1);
         }
-
         return IsGoodGeneration(v2List);
     }
 
@@ -96,8 +117,8 @@ public class MapProcGen : MonoBehaviour
 
     private bool IsGoodTilePlacement(int x, int y , int min , int max) 
     {
-        return ((TileCrossChecker(x,y) == min && TileDiagonalChecker(x,y) <= max)) 
-            || (TileCrossChecker(x,y) <= max && TileDiagonalChecker(x,y) == min); 
+        return !_mapSolidsArr[x,y] && ((TileCrossChecker(x,y) == min && TileDiagonalChecker(x,y) <= max) 
+            || (TileCrossChecker(x,y) <= max && TileDiagonalChecker(x,y) == min)); 
     }
 
     private int TileCrossChecker(int x , int y)
@@ -143,68 +164,100 @@ public class MapProcGen : MonoBehaviour
         else {return !_mapSolidsArr[x , y ]; }
     }
 
-    private void AddPrefabToMap(GameObject randomPrfb)
+    private void AddPrefabToMap(GameObject randomPrfb , bool IsSolid = true)
     {
-        List<Vector2> v2List = ProcGen.PrefabSizeDic[randomPrfb.name];
+        List<Vector2> v2List = new List<Vector2>(ProcGen.PrefabSizeDic[randomPrfb.name]);
         int prefabSize = v2List.Count;
 
         foreach(Vector2 v2 in v2List)
         {
-            _mapSolidsArr[(int)v2.x, (int)v2.y] = true;
+            _mapSolidsArr[(int)v2.x + _rndX, (int)v2.y + _rndY] = IsSolid;
         }
 
         Vector2 pos = (v2List.ToArray()[0] + new Vector2(_rndX, _rndY)) * (ProcGen.V_SIZE * new Vector2(1 , -1));
         SpriteRenderer sprite = randomPrfb.GetComponent<SpriteRenderer>();
-        sprite.sortingOrder = (int)pos.y * -1;
+        sprite.sortingOrder = ((int)pos.y * -1) + 10;
         Instantiate(randomPrfb, pos, Quaternion.identity);
     }
 
 
     // gets an gameObj instan of a random prefab from the dic pool:
-    private GameObject GetRandomPrefab()
+    private GameObject GetRandomPrefab(OBJ_TAG objTag)
     {
-        int rnd = (int)Random.Range(0, ProcGen.PrefabSizeDic.Keys.Count);
-        return ProcGen.PrefabFetcherDic
-        [ProcGen.PrefabFetcherDic.Keys.ToArray()[rnd]];
-
-
-        //FOR NOW TESTING !
-        //return ProcGen.PrefabFetcherDic["Tree-dried"];
+        int rnd = Random.Range(0, ProcGen.PrefabFetcherDic[objTag].Keys.Count);
+        return ProcGen.PrefabFetcherDic[objTag]
+            [ProcGen.PrefabFetcherDic[objTag].Keys.ToArray()[rnd]];
     }
 
     private void ApplyRandomPos()
     {
-        _rndX = (int)Random.Range(0, _mapWidth-1);
-        _rndY = (int)Random.Range(0, _mapHeight-1);
+        _rndX = Random.Range(0, _mapWidth-1);
+        _rndY = Random.Range(0, _mapHeight-1);
     }
 }
+
+
+
 
 public interface ProcGen
 {
     public static readonly float SIZE = 6.5f;
     public static readonly Vector2 V_SIZE = Vector2.one * SIZE;
-    
-    public static readonly Dictionary<string, GameObject> PrefabFetcherDic = new Dictionary<string, GameObject>
+
+    public static readonly Dictionary<OBJ_TAG, Dictionary<string, GameObject>> PrefabFetcherDic = new Dictionary<OBJ_TAG, Dictionary<string, GameObject>>()
     {
         {
-            "Tree-orange", 
-            Resources.Load("Prefabs/Environment/Tree-orange", typeof(GameObject)) as GameObject 
+              OBJ_TAG.MAP_OBJ, new Dictionary<string, GameObject>
+              {
+                     {
+                        "Tree-orange", 
+                        Resources.Load("Prefabs/Environment/Tree-orange", typeof(GameObject)) as GameObject
+                     },
+
+                     {
+                        "Tree-dried" ,
+                        Resources.Load("Prefabs/Environment/Tree-dried", typeof(GameObject)) as GameObject
+                     },
+
+                     {
+                        "Rock-monument" ,
+                        Resources.Load("Prefabs/Environment/Rock-monument", typeof(GameObject)) as GameObject
+                     },
+              }
         },
 
         {
-            "Tree-dried" ,
-            Resources.Load("Prefabs/Environment/Tree-dried", typeof(GameObject)) as GameObject 
-        },
+              OBJ_TAG.UNIT, new Dictionary<string, GameObject>
+              {
+                     {
+                        "Enemy-Default",
+                        Resources.Load("Prefabs/Units/Enemy/Enemy-Default", typeof(GameObject)) as GameObject
+                     },
 
-        {
-            "Rock-monument" , 
-            Resources.Load("Prefabs/Environment/Rock-monument", typeof(GameObject)) as GameObject 
+                     {
+                        "Enemy-Default2",
+                        Resources.Load("Prefabs/Units/Enemy/Enemy-Default", typeof(GameObject)) as GameObject
+                     },
+
+                     {
+                        "Enemy-Default3",
+                        Resources.Load("Prefabs/Units/Enemy/Enemy-Default", typeof(GameObject)) as GameObject
+                     },
+              }
+
         },
 
     };
-
     public static readonly Dictionary<string, List<Vector2>> PrefabSizeDic = new Dictionary<string, List<Vector2>>
     {
+         {
+            "Enemy-Default",
+            new List<Vector2>
+            {
+                new Vector2(0,0),
+            }
+        },
+
         {
             "Tree-orange",
             new List<Vector2>
@@ -232,10 +285,12 @@ public interface ProcGen
                 new Vector2(1 , 1),
             }
         },
-
     };
-
-
 }
 
 
+public enum OBJ_TAG
+{
+    MAP_OBJ,
+    UNIT,
+}
