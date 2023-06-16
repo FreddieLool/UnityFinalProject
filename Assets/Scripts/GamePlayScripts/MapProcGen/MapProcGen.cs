@@ -9,7 +9,7 @@ public class MapProcGen : MonoBehaviour
 {
     private bool[,] _mapSolidsArr;
     private int 
-        _mapWidth = 35,
+        _mapWidth = 40,
         _mapHeight = 35,
         _mapObjAmount = 255,
         _enemyUnitAmount = 1,
