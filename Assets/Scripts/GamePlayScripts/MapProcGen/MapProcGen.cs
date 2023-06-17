@@ -8,42 +8,68 @@ using System.Diagnostics;
 public class MapProcGen : MonoBehaviour
 {
     private bool[,] _mapSolidsArr;
-    private int 
+    private int
         _mapWidth = 40,
         _mapHeight = 35,
         _mapObjAmount = 255,
-        _enemyUnitAmount = 1,
         _tries = 0,
         _limit = 333333,
         _rndX, _rndY,
-        _enemySpawnMill = 500,
-        _enemyMaxAmount = 20;
+        _enemyAmount = 1,
+        _enemyResMill = 500;
 
-    public static int CurrentEnemyAmount { get; private set; }
+    private Stopwatch _enemyResTim = new Stopwatch();
 
-    private Stopwatch _enemySpawnTimer = new Stopwatch();
+    // GENERAL USE METHODS!
+    private bool IsPosOnEdgeOfMap(int x, int y) // returns true if the selected tile pos is on the edge of the map.
+    { return x == 0 || y == 0 || x == _mapWidth - 1 || y == _mapHeight - 1; }
+    private bool OutOfBounds(int x, int y) // returns true of the pos given is out of the terrain.
+    { return x < 0 || y < 0 || x > (_mapWidth - 2) || y > (_mapHeight - 2); }
+    //--
 
     private void Start()
     {
         _mapSolidsArr = new bool[_mapWidth, _mapHeight];
+        // GENERATING RING OB BORDERS:
+        GenerateBorders();
 
         // GENERATING MAP OBJECTS :
         GenerateSomething(OBJ_TAG.MAP_OBJ, _mapObjAmount);
+
+        _enemyResTim.Start();
     }
 
     private void FixedUpdate()
     {
-        if(CurrentEnemyAmount <= _enemyMaxAmount && !_enemySpawnTimer.IsRunning 
-            || _enemySpawnTimer.ElapsedMilliseconds >= _enemySpawnMill)
+        if(_enemyResTim.ElapsedMilliseconds >= _enemyResMill)
         {
-            GenerateSomething(OBJ_TAG.UNIT, _enemyUnitAmount);
-            CurrentEnemyAmount += _enemyUnitAmount;
-            _enemySpawnTimer.Restart();
+            GenerateSomething(OBJ_TAG.UNIT, _enemyAmount);
+            _enemyResTim.Restart();
+        }
+    }
+
+    private void GenerateBorders()
+    {
+        GameObject BorderPrefab = ProcGen.PrefabFetcherDic[OBJ_TAG.BORDER]["Border-Default"];
+        for(int iX = 0; iX < _mapWidth; iX++)
+        {
+            for(int iY = 0; iY < _mapHeight; iY++)
+            {
+                if(IsPosOnEdgeOfMap(iX , iY)) 
+                {
+                    _rndX = iX;
+                    _rndY = iY;
+                    AddPrefabToMap(BorderPrefab);
+                }
+            }
         }
     }
 
     private void GenerateSomething(OBJ_TAG objTag , int Amount)
     {
+        bool IsSolid = true;
+        if(objTag == OBJ_TAG.UNIT) { IsSolid = !IsSolid; }
+
         for (int i = 0; i < Amount; i++)
         {
             ApplyRandomPos();
@@ -51,7 +77,7 @@ public class MapProcGen : MonoBehaviour
 
             if (IsGoodGenerationHelper(randomPrfb))
             {
-                AddPrefabToMap(randomPrfb);
+                AddPrefabToMap(randomPrfb , IsSolid);
                 _tries = 0;
             }
             else
@@ -111,9 +137,6 @@ public class MapProcGen : MonoBehaviour
         
         return IsGoodGeneration(v2List); 
     }
-
-    private bool OutOfBounds(int x , int y) // returns true of the pos given is out of the terrain.
-    { return x < 0 || y < 0 || x > (_mapWidth - 2) || y > (_mapHeight - 2) ; }
 
     private bool IsGoodTilePlacement(int x, int y , int min , int max) 
     {
@@ -210,7 +233,7 @@ public interface ProcGen
               OBJ_TAG.MAP_OBJ, new Dictionary<string, GameObject>
               {
                      {
-                        "Tree-orange", 
+                        "Tree-orange",
                         Resources.Load("Prefabs/Environment/Tree-orange", typeof(GameObject)) as GameObject
                      },
 
@@ -233,18 +256,18 @@ public interface ProcGen
                         "Enemy-Default",
                         Resources.Load("Prefabs/Units/Enemy/Enemy-Default", typeof(GameObject)) as GameObject
                      },
-
-                     {
-                        "Enemy-Default2",
-                        Resources.Load("Prefabs/Units/Enemy/Enemy-Default", typeof(GameObject)) as GameObject
-                     },
-
-                     {
-                        "Enemy-Default3",
-                        Resources.Load("Prefabs/Units/Enemy/Enemy-Default", typeof(GameObject)) as GameObject
-                     },
               }
 
+        },
+
+        {
+            OBJ_TAG.BORDER, new Dictionary<string, GameObject>
+            {
+                     {
+                        "Border-Default",
+                        Resources.Load("Prefabs/Environment/Border-Default", typeof(GameObject)) as GameObject
+                     },
+            }
         },
 
     };
@@ -285,6 +308,14 @@ public interface ProcGen
                 new Vector2(1 , 1),
             }
         },
+
+        {
+            "Border-Default",
+            new List<Vector2>
+            {
+                new Vector2(0,0),
+            }
+        },
     };
 }
 
@@ -293,4 +324,5 @@ public enum OBJ_TAG
 {
     MAP_OBJ,
     UNIT,
+    BORDER,
 }
