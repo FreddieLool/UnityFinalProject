@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class EnemyPathFinding : MonoBehaviour
 {
-    [SerializeField] float Speed;
+    [SerializeField] UNIT_TAG UnitTag;
+    private Unit _unit;
+
     [SerializeField] Rigidbody2D Rb2D;
 
     private GameObject _player;
@@ -12,6 +14,7 @@ public class EnemyPathFinding : MonoBehaviour
     // applying player ( not the prefab ) to the private player gameObject :
     private void Start()
     {
+        _unit = Unit.UnitGiverDic[UnitTag];
         _player = GameObject.Find("Player");
     }
 
@@ -23,7 +26,7 @@ public class EnemyPathFinding : MonoBehaviour
         float angle = Mathf.Atan2(direction.y , direction.x) * Mathf.Rad2Deg - 90;
 
         //making ai move twards the player :
-        Rb2D.MovePosition(Rb2D.position + direction * Speed * Time.fixedDeltaTime);
+        Rb2D.MovePosition(Rb2D.position + direction * _unit.Speed * Time.fixedDeltaTime);
 
 
         // making the ai look at the player:

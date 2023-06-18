@@ -5,12 +5,21 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     // public stuff :
-    public float Speed = 5;
+    [SerializeField] UNIT_TAG UnitTag;
+    private Unit _unit;
+
+    public float Speed;
     public Rigidbody2D rb;
     public Camera Cam;
     // private vectors to get pos:
     Vector2 _movement;
     Vector2 _mousePos;
+
+    private void Start()
+    {
+        _unit = Unit.UnitGiverDic[UnitTag];
+        Speed = _unit.Speed;
+    }
 
     void Update()
     {

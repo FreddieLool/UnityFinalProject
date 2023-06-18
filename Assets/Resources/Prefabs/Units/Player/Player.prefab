@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a5d805468abfb43ac0137015fdc06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitTag: 1
   Speed: 5
   rb: {fileID: 8667397649212175484}
   Cam: {fileID: 0}
@@ -185,10 +186,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a89db9b585d84484082b177184816135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitTag: 1
   ShootingPoint: {fileID: 8667397648152926630}
   bulletPrefab: {fileID: 2919094061169030493, guid: bae6418b2277af0479a3b146f7480e3f, type: 3}
-  BulletForse: 20
-  AttackSpeedMill: 150
+  BulletForce: 20
 --- !u!114 &-8517987949316108655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,3 +203,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitTag: 1
+  UHP: 0
+  UDMG: 0

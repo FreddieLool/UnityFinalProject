@@ -11,26 +11,19 @@ public class Unit_Handeler : MonoBehaviour
     public float UHP;
     public float UDMG;
 
-    private Stopwatch _dmgTakenTimer = new Stopwatch();
-    private float _dmgTakenMill;
-
-
 
     void Start()
     {
         unit = new Unit(Unit.UnitGiverDic[UnitTag]);
-        if (UnitTag == UNIT_TAG.Player_Default) { _dmgTakenMill = 1000; }
-        else { _dmgTakenMill = 30; }
-
-        _dmgTakenTimer.Start();
+        unit.DamageTakenTimer.Start();
     }
     private void FixedUpdate()
     {
         UHP = unit.HP;
         UDMG = unit.DMG;
-        if(_dmgTakenTimer.ElapsedMilliseconds >= _dmgTakenMill)
+        if(unit.DamageTakenTimer.ElapsedMilliseconds >= unit.DamageTakenMill)
         {
-            _dmgTakenTimer.Reset();
+            unit.DamageTakenTimer.Reset();
         }
     }
 
@@ -38,7 +31,7 @@ public class Unit_Handeler : MonoBehaviour
     {
         Unit collidedUnit = null;
 
-        if(!_dmgTakenTimer.IsRunning)
+        if(!unit.DamageTakenTimer.IsRunning)
         {
             if (collision.gameObject.GetComponent<Unit_Handeler>() != null)
             {
@@ -63,7 +56,7 @@ public class Unit_Handeler : MonoBehaviour
                 TakeDmg(collidedUnit.DMG);
             }
 
-            _dmgTakenTimer.Start();
+            unit.DamageTakenTimer.Start();
         }
     }
 
