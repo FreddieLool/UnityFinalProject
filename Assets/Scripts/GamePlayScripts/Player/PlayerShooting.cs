@@ -7,7 +7,7 @@ public class PlayerShooting : MonoBehaviour
 {
     public Transform ShootingPoint;
     public GameObject bulletPrefab;
-    public float BulletForse = 20;
+    public float BulletForce = 20;
 
 
     // attack speed stuff : ( each time shooting timer gets to the mill , player can shoot)
@@ -33,7 +33,7 @@ public class PlayerShooting : MonoBehaviour
     {
         GameObject newBullet = 
         Instantiate(bulletPrefab, ShootingPoint.position, ShootingPoint.rotation);
-        newBullet.GetComponent<Rigidbody2D>().AddForce(ShootingPoint.up * BulletForse, ForceMode2D.Impulse);
+        newBullet.GetComponent<Rigidbody2D>().AddForce(ShootingPoint.up * BulletForce, ForceMode2D.Impulse);
 
         newBullet.AddComponent<Bullet>().Owner = this.gameObject;
     }
