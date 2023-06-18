@@ -9,16 +9,22 @@ public class MapProcGen : MonoBehaviour
 {
     private bool[,] _mapSolidsArr;
     private int
-        _mapWidth = 40,
-        _mapHeight = 35,
-        _mapObjAmount = 255,
-        _tries = 0,
-        _limit = 333333,
-        _rndX, _rndY,
-        _enemyAmount = 1,
-        _enemyResMill = 250;
+        _mapWidth = 40, // height of the map.
+        _mapHeight = 35, // width of the map.
+        _mapObjAmount = 255, // how much map object to spawn on the map.
+        _tries = 0, // current tries.
+        _limit = 333333, // limit on how many tries the procGen methon can try to generate an object.
+        _rndX, _rndY, // random cords for the proc gen.
+        _enemyAmount = 1, // how much enemies spawn every resMill.
+        _enemyResMill = 250, // amount of time for each enemy to respawn.
+        _enemyMinSpawnDistance = 25, // min dist that enemy can spawn from the player.
+        _maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map. 
+
+    private static float _size = 6.5F; // density of the peoc gen ( the less this num is , the more dense object will be to one another).
+    private Vector2 _v_size = Vector2.one * _size; // size in Vector2.
 
     private Stopwatch _enemyResTim = new Stopwatch();
+    private GameObject _player;
 
     // GENERAL USE METHODS!
     private bool IsPosOnEdgeOfMap(int x, int y) // returns true if the selected tile pos is on the edge of the map.
@@ -29,6 +35,8 @@ public class MapProcGen : MonoBehaviour
 
     private void Start()
     {
+        _player = GameObject.Find("Player");
+
         _mapSolidsArr = new bool[_mapWidth, _mapHeight];
         // GENERATING RING OB BORDERS:
         GenerateBorders();
@@ -43,7 +51,9 @@ public class MapProcGen : MonoBehaviour
     {
         if(_enemyResTim.ElapsedMilliseconds >= _enemyResMill)
         {
-            GenerateSomething(OBJ_TAG.UNIT, _enemyAmount);
+            GenerateSomething(OBJ_TAG.UNIT, _enemyAmount ,
+                _enemyMinSpawnDistance);
+
             _enemyResTim.Restart();
         }
     }
@@ -65,7 +75,7 @@ public class MapProcGen : MonoBehaviour
         }
     }
 
-    private void GenerateSomething(OBJ_TAG objTag , int Amount)
+    private void GenerateSomething(OBJ_TAG objTag , int Amount , int minDistance = 0)
     {
         bool IsSolid = true;
         if(objTag == OBJ_TAG.UNIT) { IsSolid = !IsSolid; }
@@ -73,6 +83,17 @@ public class MapProcGen : MonoBehaviour
         for (int i = 0; i < Amount; i++)
         {
             ApplyRandomPos();
+
+            float dist = Vector2.Distance(new Vector2(_rndX, _rndY), _player.transform.position);
+            if (minDistance != 0)
+            {
+                while (dist <= minDistance)
+                {
+                    ApplyRandomPos();
+                    dist = Vector2.Distance(new Vector2(_rndX, _rndY), _player.transform.position);
+                }
+            }   
+            
             GameObject randomPrfb = GetRandomPrefab(objTag);
 
             if (IsGoodGenerationHelper(randomPrfb))
@@ -197,7 +218,7 @@ public class MapProcGen : MonoBehaviour
             _mapSolidsArr[(int)v2.x + _rndX, (int)v2.y + _rndY] = IsSolid;
         }
 
-        Vector2 pos = (v2List.ToArray()[0] + new Vector2(_rndX, _rndY)) * (ProcGen.V_SIZE * new Vector2(1 , -1));
+        Vector2 pos = (v2List.ToArray()[0] + new Vector2(_rndX, _rndY)) * (_v_size * new Vector2(1 , -1));
         SpriteRenderer sprite = randomPrfb.GetComponent<SpriteRenderer>();
         sprite.sortingOrder = ((int)pos.y * -1) + 10;
         Instantiate(randomPrfb, pos, Quaternion.identity);
@@ -224,9 +245,6 @@ public class MapProcGen : MonoBehaviour
 
 public interface ProcGen
 {
-    public static readonly float SIZE = 6.5f;
-    public static readonly Vector2 V_SIZE = Vector2.one * SIZE;
-
     public static readonly Dictionary<OBJ_TAG, Dictionary<string, GameObject>> PrefabFetcherDic = new Dictionary<OBJ_TAG, Dictionary<string, GameObject>>()
     {
         {

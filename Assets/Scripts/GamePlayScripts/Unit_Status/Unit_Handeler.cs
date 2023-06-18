@@ -5,7 +5,8 @@ using System.Diagnostics;
 
 public class Unit_Handeler : MonoBehaviour
 {
-    [SerializeField] UNIT_TAG UnitTag;
+    [SerializeField] UNIT_TAG UnitTag; // general unit tag ( diff for each unit )
+
     public Unit unit;
     public float UHP;
     public float UDMG;
@@ -35,26 +36,33 @@ public class Unit_Handeler : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Unit collidedObj;
-      
+        Unit collidedUnit = null;
+
         if(!_dmgTakenTimer.IsRunning)
         {
             if (collision.gameObject.GetComponent<Unit_Handeler>() != null)
             {
-                if (collision.gameObject.GetComponent<Unit_Handeler>().unit.IsMelee)
+                Unit_Handeler collidedUnitHandeler = collision.gameObject.GetComponent<Unit_Handeler>();
+
+                if (collidedUnitHandeler.unit.IsMelee)
                 {
-                    collidedObj = new Unit(collision.gameObject.GetComponent<Unit_Handeler>().unit);
-                    TakeDmg(collidedObj.DMG);
+                    collidedUnit = new Unit(collidedUnitHandeler.unit);
                 }
             }
             else
             {
                 if (collision.gameObject.GetComponent<Bullet>() != null)
                 {
-                    collidedObj = collision.gameObject.GetComponent<Bullet>().Owner.GetComponent<Unit_Handeler>().unit;
-                    TakeDmg(collidedObj.DMG);
+                    collidedUnit = collision.gameObject.GetComponent<Bullet>()
+                        .Owner.GetComponent<Unit_Handeler>().unit;
                 }
             }
+
+            if(collidedUnit != null && unit.UnitTYPE != collidedUnit.UnitTYPE)
+            {
+                TakeDmg(collidedUnit.DMG);
+            }
+
             _dmgTakenTimer.Start();
         }
     }
@@ -70,5 +78,7 @@ public class Unit_Handeler : MonoBehaviour
         if (unit.HP <= 0) { Die(); }
     }
 
-
 }
+
+
+
