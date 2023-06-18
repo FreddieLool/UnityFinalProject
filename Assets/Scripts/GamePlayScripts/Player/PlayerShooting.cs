@@ -31,8 +31,10 @@ public class PlayerShooting : MonoBehaviour
 
     public void Shoot()
     {
-         Instantiate(bulletPrefab, ShootingPoint.position, ShootingPoint.rotation)
-            .GetComponent<Rigidbody2D>()
-            .AddForce(ShootingPoint.up * BulletForse, ForceMode2D.Impulse);
+        GameObject newBullet = 
+        Instantiate(bulletPrefab, ShootingPoint.position, ShootingPoint.rotation);
+        newBullet.GetComponent<Rigidbody2D>().AddForce(ShootingPoint.up * BulletForse, ForceMode2D.Impulse);
+
+        newBullet.AddComponent<Bullet>().Owner = this.gameObject;
     }
 }

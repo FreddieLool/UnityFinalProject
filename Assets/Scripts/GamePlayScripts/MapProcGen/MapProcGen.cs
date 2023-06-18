@@ -16,7 +16,7 @@ public class MapProcGen : MonoBehaviour
         _limit = 333333,
         _rndX, _rndY,
         _enemyAmount = 1,
-        _enemyResMill = 500;
+        _enemyResMill = 250;
 
     private Stopwatch _enemyResTim = new Stopwatch();
 
