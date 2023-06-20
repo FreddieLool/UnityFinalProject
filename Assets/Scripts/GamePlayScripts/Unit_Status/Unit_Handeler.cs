@@ -40,7 +40,7 @@ public class Unit_Handeler : MonoBehaviour
     {
         _collidedUnit = null;
 
-        if(unit.DamageTakenTimer == null)
+        if(unit == null)
         {
             return;
         }

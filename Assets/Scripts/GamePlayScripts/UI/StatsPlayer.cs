@@ -44,17 +44,23 @@ public class StatsPlayer : MonoBehaviour
         XpTpLevelUp = _playerUnit.XpToLevelUp;
     }
 
-    void Update()
+    private void Update()
     {
         if (!_once) { return; }
 
         _stats.text =
             "\n"+
-            $"Health : {HP } \n\n"+
-            $"Damage : {DMG } \n\n"+
-            $"AttackRate : {AttackRate } \n\n"+
-            $"Speed : {Speed }\n\n"+
-            $"Level : {Level }\n\n"+
-            $"XP : {(int)XP} / {(int)XpTpLevelUp}";
+            $"Health : {NiceVal(HP)} \n\n"+
+            $"Damage : {NiceVal(DMG)} \n\n"+
+            $"AttackRate : {NiceVal(AttackRate)} \n\n"+
+            $"Speed : {NiceVal(Speed)}\n\n"+
+            $"Level : {NiceVal(Level)}\n\n"+
+            $"XP : {NiceVal(XP)} / {NiceVal(XpTpLevelUp)}";
+    }
+
+    private float NiceVal(float val)
+    { 
+        if(val % 1 == 0) { return val; }
+        else { return val - (val % 0.1f); }        
     }
 }
