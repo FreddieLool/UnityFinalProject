@@ -9,9 +9,9 @@ public class MapProcGen : MonoBehaviour
 {
     private bool[,] _mapSolidsArr;
     private int
-        _mapWidth = 40, // height of the map.
-        _mapHeight = 35, // width of the map.
-        _mapObjAmount = 255, // how much map object to spawn on the map.
+        _mapWidth = 57, // height of the map.
+        _mapHeight = 50, // width of the map.
+        _mapObjAmount = 505, // how much map object to spawn on the map.
         _tries = 0, // current tries.
         _limit = 333333, // limit on how many tries the procGen methon can try to generate an object.
         _rndX, _rndY, // random cords for the proc gen.
@@ -20,7 +20,7 @@ public class MapProcGen : MonoBehaviour
         _enemyMinSpawnDistance = 25, // min dist that enemy can spawn from the player.
         _maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map. 
 
-    private static float _size = 6.5F; // density of the peoc gen ( the less this num is , the more dense object will be to one another).
+    private static float _size = 4.5F; // density of the peoc gen ( the less this num is , the more dense object will be to one another).
     private Vector2 _v_size = Vector2.one * _size; // size in Vector2.
 
     private Stopwatch _enemyResTim = new Stopwatch();
@@ -61,7 +61,8 @@ public class MapProcGen : MonoBehaviour
     private void GenerateBorders()
     {
         GameObject BorderPrefab = ProcGen.PrefabFetcherDic[OBJ_TAG.BORDER]["Border-Default"];
-        for(int iX = 0; iX < _mapWidth; iX++)
+        BorderPrefab.transform.localScale = new Vector2(0.52f * _size, 0.52f * _size);
+        for (int iX = 0; iX < _mapWidth; iX++)
         {
             for(int iY = 0; iY < _mapHeight; iY++)
             {
