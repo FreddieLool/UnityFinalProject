@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _unit = Unit.UnitGiverDic[UnitTag];
-        Speed = _unit.Speed;
+        Speed = _unit.Speed.Value;
     }
 
     void Update()

@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
     [SerializeField] GameObject StatsMenu;
 
     private bool
-        _activateStatsBar,
-        _isKeyUp;
+        _activateStatsBar;
+
 
     // getting ( in update for max response rate ) if the button is pressed . if so ,
     // activate / deactivate the stats bar.
     void Update()
     {
-        _isKeyUp = Input.GetKeyUp(KeyCode.I);
-
         if (Input.GetKeyUp(KeyCode.I))
         {
             _activateStatsBar = !_activateStatsBar;

@@ -26,7 +26,7 @@ public class EnemyPathFinding : MonoBehaviour
         float angle = Mathf.Atan2(direction.y , direction.x) * Mathf.Rad2Deg - 90;
 
         //making ai move twards the player :
-        Rb2D.MovePosition(Rb2D.position + direction * _unit.Speed * Time.fixedDeltaTime);
+        Rb2D.MovePosition(Rb2D.position + direction * _unit.Speed.Value * Time.fixedDeltaTime);
 
 
         // making the ai look at the player:

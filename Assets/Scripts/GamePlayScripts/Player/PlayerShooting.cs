@@ -25,7 +25,7 @@ public class PlayerShooting : MonoBehaviour
 
     public void Update()
     {
-        if(_unit.AttackRateTimer.ElapsedMilliseconds >= _unit.AttackRateMill)
+        if(_unit.AttackRateTimer.ElapsedMilliseconds >= _unit.AttackRateMill.Value)
         {
             _unit.AttackRateTimer.Stop();
         }
