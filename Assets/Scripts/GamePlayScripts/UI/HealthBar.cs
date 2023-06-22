@@ -5,31 +5,26 @@ public class HealthBar : MonoBehaviour
 {
     public Slider slider;
     [SerializeField] GameObject Player;
-    private Unit _playerUnit = null;
-    private float _maxHP;
+    private Unit _playerUnit;
+    private float _maxHP = 0;
+    private void Start()
+    {
+        _playerUnit = Player.GetComponent<Unit_Handeler>().unit;
+    }
     private void Update()
     {
-        if (Player.GetComponent<Unit_Handeler>() == null)
+        if (_playerUnit.HP.Value > _maxHP)
         {
-            return;
+            SetHP();
         }
-        else
-        {
-            if (_playerUnit == null)
-            {
-                _playerUnit = Player.GetComponent<Unit_Handeler>().unit;
-                SetHP();
-                _maxHP = _playerUnit.HP.Value;
-            }
-            UpdateHP();
-        }
-
+        UpdateHP();
     }
-    public void SetHP()
+    private void SetHP()
     {
-        slider.value = _playerUnit.HP.Value ;
+        _maxHP = _playerUnit.HP.Value;
+        slider.value = _maxHP;
     }
-    public void UpdateHP()
+    private void UpdateHP()
     {
         slider.value = _playerUnit.HP.Value / _maxHP;
     }

@@ -15,8 +15,6 @@ public class StatsPlayer : MonoBehaviour
         XP,
         XpTpLevelUp;
 
-    private bool _once = false;
-
     private Unit _playerUnit;
 
     private TextMeshProUGUI _stats;
@@ -24,17 +22,12 @@ public class StatsPlayer : MonoBehaviour
     void Start()
     {
         _stats = GetComponent<TextMeshProUGUI>();
+        _playerUnit = GameObject.Find("Player").GetComponent<Unit_Handeler>().unit;
     }
 
     
     private void FixedUpdate()
     {
-        if(GameObject.Find("Player").GetComponent<Unit_Handeler>().unit == null) { return; }
-        else if(!_once) 
-        { 
-            _once = true;
-            _playerUnit = GameObject.Find("Player").GetComponent<Unit_Handeler>().unit;
-        }
         HP = _playerUnit.HP.Value;
         DMG = _playerUnit.DMG.Value;
         AttackRate = _playerUnit.AttackRateMill.Value;
@@ -46,8 +39,6 @@ public class StatsPlayer : MonoBehaviour
 
     private void Update()
     {
-        if (!_once) { return; }
-
         _stats.text =
             "\n"+
             $"Health : {NiceVal(HP)} \n\n"+

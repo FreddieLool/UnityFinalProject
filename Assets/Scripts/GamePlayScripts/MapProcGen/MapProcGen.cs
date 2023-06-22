@@ -33,6 +33,7 @@ public class MapProcGen : MonoBehaviour
     private Stopwatch _enemyResTim = new Stopwatch();
 
     private OBJ_SIZE _currentObjSize;
+    private OBJ_TAG _currentObjTag;
    
 
     //ENEMY STUFF :
@@ -113,6 +114,7 @@ public class MapProcGen : MonoBehaviour
     private void GenerateSomething(OBJ_TAG objTag , OBJ_SIZE objSize , int Amount , int minDistance = 0)
     {
         _currentObjSize = objSize;
+        _currentObjTag = objTag;
         bool IsSolid = true;
         if(objTag == OBJ_TAG.UNIT) { IsSolid = false; }
 
@@ -252,7 +254,7 @@ public class MapProcGen : MonoBehaviour
         else {return !_mapSolidsArr[x , y ]; }
     }
 
-    private void AddPrefabToMap(GameObject randomPrfb , bool IsSolid = true)
+    private void AddPrefabToMap(GameObject randomPrfb , bool IsSolid = true )
     {
         List<Vector2> v2List = new List<Vector2>(ProcGen.PrefabSizeDic[_currentObjSize][randomPrfb.name]);
      
@@ -263,7 +265,14 @@ public class MapProcGen : MonoBehaviour
 
         Vector2 pos = (v2List.ToArray()[0] + new Vector2(_rndX, _rndY)) * (_v_size * new Vector2(1 , -1));
         SpriteRenderer sprite = randomPrfb.GetComponent<SpriteRenderer>();
-        sprite.sortingOrder = ((int)pos.y * -1) + 10;
+        if (_currentObjTag == OBJ_TAG.UNIT)
+        {
+            sprite.sortingOrder = 10;
+        }
+        else
+        {
+            sprite.sortingOrder = ((int)pos.y * -1) + 10;
+        }
         Instantiate(randomPrfb, pos, Quaternion.identity);
     }
 

@@ -15,14 +15,17 @@ public class Unit_Handeler : MonoBehaviour
     //for now :
     private float _deadUnitXp = 25;
     private float _totalMill = MapProcGen.GlobalTotalMill + MapProcGen.EnemyXpGainMill;
-    private static readonly int _enemyModifiedChance = 16;
+    private static readonly int _enemyModifiedChance = 17;
+
+    private void Awake()
+    {
+        unit = new Unit(Unit.UnitGiverDic[UnitTag]);
+        unit.UnitTag = this.UnitTag;
+    }
 
     void Start()
     {
-        unit = new Unit(Unit.UnitGiverDic[UnitTag]);
         unit.ImmortalTimer.Start();
-        unit.UnitTag = this.UnitTag;
-        
 
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {

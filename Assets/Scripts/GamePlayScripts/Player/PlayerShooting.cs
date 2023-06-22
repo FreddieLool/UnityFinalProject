@@ -7,32 +7,29 @@ using System.Diagnostics;
 public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] UNIT_TAG UnitTag;
-    private Unit _unit;
+    private Unit _playerUnit;
     public Transform ShootingPoint;
     public GameObject bulletPrefab;
-    public float BulletForce = 35;
+    public float BulletForce = 55;
 
 
     // attack speed stuff : ( each time shooting timer gets to the mill , player can shoot)
-    // FOR NOW ATTACK SPEED IS IN HERE ( later we will prob have a status class which as will be there)
-
-
+   
     public void Start()
     {
-        _unit = Unit.UnitGiverDic[UnitTag];
+        _playerUnit = GetComponent<Unit_Handeler>().unit;
     }
-
 
     public void Update()
     {
-        if(_unit.AttackRateTimer.ElapsedMilliseconds >= _unit.AttackRateMill.Value)
+        if(_playerUnit.AttackRateTimer.ElapsedMilliseconds >= _playerUnit.AttackRateMill.Value)
         {
-            _unit.AttackRateTimer.Stop();
+            _playerUnit.AttackRateTimer.Stop();
         }
 
-        if(Input.GetButton("Fire1") && !_unit.AttackRateTimer.IsRunning)
+        if(Input.GetButton("Fire1") && !_playerUnit.AttackRateTimer.IsRunning)
         {
-            _unit.AttackRateTimer.Restart();
+            _playerUnit.AttackRateTimer.Restart();
             Shoot();
         }
     }
