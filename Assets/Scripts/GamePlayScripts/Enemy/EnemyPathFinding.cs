@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class EnemyPathFinding : MonoBehaviour
 {
-    [SerializeField] UNIT_TAG UnitTag;
-    private Unit _unit;
+    private Unit _unit = null;
 
-    [SerializeField] Rigidbody2D Rb2D;
+    private Rigidbody2D _rb2D;
 
     private GameObject _player;
+
 
     // applying player ( not the prefab ) to the private player gameObject :
     private void Start()
     {
-        _unit = Unit.UnitGiverDic[UnitTag];
+        _rb2D = gameObject.GetComponent<Rigidbody2D>();
         _player = GameObject.Find("Player");
+        _unit = gameObject.GetComponent<Unit_Handeler>().unit;
     }
 
     // making  the enemy ai follow the player and change his angle that he will look at the player also :
@@ -23,11 +24,10 @@ public class EnemyPathFinding : MonoBehaviour
     {
         Vector2 direction = _player.transform.position - this.transform.position;
         direction.Normalize();
-        float angle = Mathf.Atan2(direction.y , direction.x) * Mathf.Rad2Deg - 90;
+        float angle = Mathf.Atan2(direction.y , direction.x) * Mathf.Rad2Deg;
 
         //making ai move twards the player :
-        Rb2D.MovePosition(Rb2D.position + direction * _unit.Speed.Value * Time.fixedDeltaTime);
-
+        _rb2D.MovePosition(_rb2D.position + direction * _unit.Speed.Value * Time.fixedDeltaTime);
 
         // making the ai look at the player:
         transform.rotation = Quaternion.Euler(Vector3.forward * angle);

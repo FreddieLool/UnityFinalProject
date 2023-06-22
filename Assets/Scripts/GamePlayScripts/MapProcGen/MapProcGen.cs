@@ -17,14 +17,24 @@ public class MapProcGen : MonoBehaviour
         _rndX, _rndY, // random cords for the proc gen.
         _enemyAmount = 1, // how much enemies spawn every resMill.
         _enemyResMill = 250, // amount of time for each enemy to respawn.
-        _enemyMinSpawnDistance = 25, // min dist that enemy can spawn from the player.
-        _maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map. 
+        _enemyMinSpawnDistance = 55, // min dist that enemy can spawn from the player.
+        _maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map.
 
     private static float _size = 4.5F; // density of the peoc gen ( the less this num is , the more dense object will be to one another).
     private Vector2 _v_size = Vector2.one * _size; // size in Vector2.
 
     private Stopwatch _enemyResTim = new Stopwatch();
     private GameObject _player;
+
+    //ENEMY STUFF :
+    public static Stopwatch EnemyXpGainTimer { get; private set; } = new Stopwatch();
+    public static float EnemyXpGainMill { get; private set; } = 1000;
+    public static float EnemyXpGain { get; private set; } = 10;
+    public static float TotalEnemyXpGain { get; private set; } = 0;
+
+    public static float GlobalTotalMill = EnemyXpGainMill;
+    //--
+
 
     // GENERAL USE METHODS!
     private bool IsPosOnEdgeOfMap(int x, int y) // returns true if the selected tile pos is on the edge of the map.
@@ -45,6 +55,7 @@ public class MapProcGen : MonoBehaviour
         GenerateSomething(OBJ_TAG.MAP_OBJ, _mapObjAmount);
 
         _enemyResTim.Start();
+        EnemyXpGainTimer.Start();
     }
 
     private void FixedUpdate()
@@ -56,6 +67,16 @@ public class MapProcGen : MonoBehaviour
 
             _enemyResTim.Restart();
         }
+        if(EnemyXpGainTimer.ElapsedMilliseconds >= GlobalTotalMill)
+        {
+            enemyXpUpdate();
+        }
+    }
+
+    private void enemyXpUpdate()
+    {
+        TotalEnemyXpGain += EnemyXpGain;
+        GlobalTotalMill += EnemyXpGainMill;
     }
 
     private void GenerateBorders()

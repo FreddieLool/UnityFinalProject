@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using System;
+using System.Linq;
 
 public class Unit_Handeler : MonoBehaviour
 {
@@ -11,19 +13,45 @@ public class Unit_Handeler : MonoBehaviour
     private Unit _collidedUnit;
 
     //for now :
-    private float _deadUnitXp = 15;
+    private float _deadUnitXp = 25;
+    private float _totalMill = MapProcGen.GlobalTotalMill + MapProcGen.EnemyXpGainMill;
+    private static readonly int _enemyModifiedChance = 16;
 
     void Start()
     {
         unit = new Unit(Unit.UnitGiverDic[UnitTag]);
-        unit.DamageTakenTimer.Start();
+        unit.ImmortalTimer.Start();
+        unit.UnitTag = this.UnitTag;
+        
+
+        if (unit.UnitType == UNIT_TYPE.ENEMY)
+        {
+            if (UnityEngine.Random.Range(1, 100) <= _enemyModifiedChance)
+            {
+                unit.UnitMod = Unit.UmList[UnityEngine.Random.Range(0, Unit.UmList.Count)];
+            }
+            unit.AddXP(MapProcGen.TotalEnemyXpGain);
+            gameObject.AddComponent<EnemyPathFinding>();
+        }
+
+        unit.UpdateUnitByModifier(unit.UnitMod);
+        gameObject.GetComponent<SpriteRenderer>().color = unit.UnitColor;
     }
 
     private void FixedUpdate()
     {
-        if(unit.DamageTakenTimer.ElapsedMilliseconds >= unit.DamageTakenMill)
+        if(unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill)
         {
-            unit.DamageTakenTimer.Reset();
+            unit.ImmortalTimer.Reset();
+        }
+
+        if (unit.UnitType == UNIT_TYPE.ENEMY)
+        {
+            if (MapProcGen.EnemyXpGainTimer.ElapsedMilliseconds >= _totalMill)
+            {
+                _totalMill += MapProcGen.EnemyXpGainMill;
+                unit.AddXP(MapProcGen.EnemyXpGain);
+            }
         }
     }
 
@@ -44,32 +72,33 @@ public class Unit_Handeler : MonoBehaviour
         {
             return;
         }
-        if (!unit.DamageTakenTimer.IsRunning)
+        if (collision.gameObject.GetComponent<Unit_Handeler>() != null)
         {
-            if (collision.gameObject.GetComponent<Unit_Handeler>() != null)
-            {
-                Unit_Handeler collidedUnitHandeler = collision.gameObject.GetComponent<Unit_Handeler>();
+            Unit_Handeler collidedUnitHandeler = collision.gameObject.GetComponent<Unit_Handeler>();
 
-                if (collidedUnitHandeler.unit.IsMelee)
-                {
-                    _collidedUnit = collidedUnitHandeler.unit;
-                }
-            }
-            else
+            if (collidedUnitHandeler.unit.IsMelee)
             {
-                if (collision.gameObject.GetComponent<Bullet>() != null)
-                {
-                    _collidedUnit = collision.gameObject.GetComponent<Bullet>()
-                        .Owner.GetComponent<Unit_Handeler>().unit;
-                }
-            }
-
-            if (_collidedUnit != null && unit.UnitTYPE != _collidedUnit.UnitTYPE)
-            {
-                TakeDmg(_collidedUnit.DMG.Value);
-                unit.DamageTakenTimer.Start();
+                _collidedUnit = collidedUnitHandeler.unit;
             }
         }
+        else
+        {
+            if (collision.gameObject.GetComponent<Bullet>() != null)
+            {
+                _collidedUnit = collision.gameObject.GetComponent<Bullet>()
+                    .Owner.GetComponent<Unit_Handeler>().unit;
+            }
+        }
+
+        if (_collidedUnit != null 
+            && !unit.ImmortalTimer.IsRunning
+            && unit.UnitType != _collidedUnit.UnitType)
+        {
+            TakeDmg(_collidedUnit.DMG.Value);
+            unit.ImmortalTimer.Start();
+        }
+
+
     }
 
     private void Die()
@@ -77,13 +106,11 @@ public class Unit_Handeler : MonoBehaviour
         _collidedUnit.AddXP(_deadUnitXp);
         Destroy(gameObject);
     }
-
-    public void TakeDmg(float enemyDmg)
+    private void TakeDmg(float enemyDmg)
     {
         unit.HP.Value -= enemyDmg;
         if (unit.IsDead()) { Die(); }
     }
-
 }
 
 

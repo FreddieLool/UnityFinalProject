@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     // public stuff :
     [SerializeField] UNIT_TAG UnitTag;
     private Unit _unit;
+    private float _rotationSpeed = 590; // the speed of the rotation.
 
     public float Speed;
     public Rigidbody2D rb;
@@ -39,7 +40,8 @@ public class PlayerMovement : MonoBehaviour
         // getting and applying the angle with mouse pos so the player model can look where the mouse is :
         // CONVERT TO JOYSTICK LATER !!
         Vector2 lookDir = _mousePos - rb.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90;
-        rb.rotation = angle;
+        float trgetAngle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+        //rb.rotation = angle;
+        rb.rotation = Mathf.MoveTowardsAngle(rb.rotation, trgetAngle, _rotationSpeed * Time.deltaTime);
     }
 }

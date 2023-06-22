@@ -10,7 +10,7 @@ public class PlayerShooting : MonoBehaviour
     private Unit _unit;
     public Transform ShootingPoint;
     public GameObject bulletPrefab;
-    public float BulletForce = 20;
+    public float BulletForce = 35;
 
 
     // attack speed stuff : ( each time shooting timer gets to the mill , player can shoot)
