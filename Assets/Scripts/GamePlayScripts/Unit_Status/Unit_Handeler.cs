@@ -76,7 +76,8 @@ public class Unit_Handeler : MonoBehaviour
         {
             Unit_Handeler collidedUnitHandeler = collision.gameObject.GetComponent<Unit_Handeler>();
 
-            if (collidedUnitHandeler.unit.IsMelee)
+            if (collision.gameObject.GetComponent<Unit_Handeler>().unit != null &&
+                collidedUnitHandeler.unit.IsMelee)
             {
                 _collidedUnit = collidedUnitHandeler.unit;
             }
@@ -104,6 +105,7 @@ public class Unit_Handeler : MonoBehaviour
     private void Die()
     {
         _collidedUnit.AddXP(_deadUnitXp);
+        ScorePlayer.AddScore(SCORE_TYPE.KILL);
         Destroy(gameObject);
     }
     private void TakeDmg(float enemyDmg)

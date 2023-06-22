@@ -160,7 +160,7 @@ public class Unit
                 break;
 
             case UNIT_MODIFIER.SPEEDY:
-                Speed.Value *= 1.5f;
+                Speed.Value *= 1.75f;
                 UnitColor = Color.black;
                 break;
 

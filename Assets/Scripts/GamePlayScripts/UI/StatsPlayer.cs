@@ -58,7 +58,7 @@ public class StatsPlayer : MonoBehaviour
             $"XP : {NiceVal(XP)} / {NiceVal(XpTpLevelUp)}";
     }
 
-    private float NiceVal(float val)
+    public static float NiceVal(float val)
     { 
         if(val % 1 == 0) { return val; }
         else { return val - (val % 0.1f); }        

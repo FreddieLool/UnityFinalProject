@@ -7,24 +7,33 @@ using System.Diagnostics;
 
 public class MapProcGen : MonoBehaviour
 {
+    [SerializeField] GameObject Player;
+
     private bool[,] _mapSolidsArr;
     private int
-        _mapWidth = 57, // height of the map.
-        _mapHeight = 50, // width of the map.
-        _mapObjAmount = 505, // how much map object to spawn on the map.
+        _mapWidth = 75, // height of the map.
+        _mapHeight = 65, // width of the map.
+        _mapSmallObjAmount = 80,
+        _mapMedObjAmount = 155,
+        _mapLargeObjAmount = 55,
         _tries = 0, // current tries.
         _limit = 333333, // limit on how many tries the procGen methon can try to generate an object.
         _rndX, _rndY, // random cords for the proc gen.
         _enemyAmount = 1, // how much enemies spawn every resMill.
-        _enemyResMill = 250, // amount of time for each enemy to respawn.
-        _enemyMinSpawnDistance = 55, // min dist that enemy can spawn from the player.
-        _maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map.
+        _enemyResMill = 950, // amount of time for each enemy to respawn.
+        _minEnemyResMill = 150,
+        _enemyResMillReduc = 3,
+        _enemyMinSpawnDistance = 30, // min dist that enemy can spawn from the player.
+        _enemyMaxSpawnDistance = 60;
+        //_maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map.
 
-    private static float _size = 4.5F; // density of the peoc gen ( the less this num is , the more dense object will be to one another).
+    private static float _size = 3.375F; // density of the peoc gen ( the less this num is , the more dense object will be to one another).
     private Vector2 _v_size = Vector2.one * _size; // size in Vector2.
 
     private Stopwatch _enemyResTim = new Stopwatch();
-    private GameObject _player;
+
+    private OBJ_SIZE _currentObjSize;
+   
 
     //ENEMY STUFF :
     public static Stopwatch EnemyXpGainTimer { get; private set; } = new Stopwatch();
@@ -45,14 +54,16 @@ public class MapProcGen : MonoBehaviour
 
     private void Start()
     {
-        _player = GameObject.Find("Player");
+        Player = GameObject.Find("Player");
 
         _mapSolidsArr = new bool[_mapWidth, _mapHeight];
         // GENERATING RING OB BORDERS:
         GenerateBorders();
 
         // GENERATING MAP OBJECTS :
-        GenerateSomething(OBJ_TAG.MAP_OBJ, _mapObjAmount);
+        GenerateSomething(OBJ_TAG.MAP_OBJ, OBJ_SIZE.SMALL ,  _mapSmallObjAmount);
+        GenerateSomething(OBJ_TAG.MAP_OBJ, OBJ_SIZE.MED, _mapMedObjAmount);
+        GenerateSomething(OBJ_TAG.MAP_OBJ, OBJ_SIZE.LARGE, _mapLargeObjAmount);
 
         _enemyResTim.Start();
         EnemyXpGainTimer.Start();
@@ -60,9 +71,9 @@ public class MapProcGen : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(_enemyResTim.ElapsedMilliseconds >= _enemyResMill)
+        if (_enemyResTim.ElapsedMilliseconds >= _enemyResMill)
         {
-            GenerateSomething(OBJ_TAG.UNIT, _enemyAmount ,
+            GenerateSomething(OBJ_TAG.UNIT, OBJ_SIZE.SMALL , _enemyAmount ,
                 _enemyMinSpawnDistance);
 
             _enemyResTim.Restart();
@@ -70,6 +81,8 @@ public class MapProcGen : MonoBehaviour
         if(EnemyXpGainTimer.ElapsedMilliseconds >= GlobalTotalMill)
         {
             enemyXpUpdate();
+            if(_enemyResMill > _minEnemyResMill) { _enemyResMill -= _enemyResMillReduc; }
+            else { _enemyResMill = _minEnemyResMill;  }
         }
     }
 
@@ -97,26 +110,35 @@ public class MapProcGen : MonoBehaviour
         }
     }
 
-    private void GenerateSomething(OBJ_TAG objTag , int Amount , int minDistance = 0)
+    private void GenerateSomething(OBJ_TAG objTag , OBJ_SIZE objSize , int Amount , int minDistance = 0)
     {
+        _currentObjSize = objSize;
         bool IsSolid = true;
-        if(objTag == OBJ_TAG.UNIT) { IsSolid = !IsSolid; }
+        if(objTag == OBJ_TAG.UNIT) { IsSolid = false; }
 
         for (int i = 0; i < Amount; i++)
         {
             ApplyRandomPos();
 
-            float dist = Vector2.Distance(new Vector2(_rndX, _rndY), _player.transform.position);
+            float dist = Mathf.Abs(Vector2.Distance(new Vector2(_rndX * _size, _rndY * _size * -1), Player.transform.position));
             if (minDistance != 0)
             {
-                while (dist <= minDistance)
+                // to make the spawn quicker:
+                int maxDistance = _enemyMaxSpawnDistance;
+                int tries = 0;
+                while (dist < minDistance || dist > maxDistance)
                 {
+                    tries++;
+                    if(tries % 10 == 0)
+                    {
+                        maxDistance++;
+                    }
                     ApplyRandomPos();
-                    dist = Vector2.Distance(new Vector2(_rndX, _rndY), _player.transform.position);
+                    dist = Mathf.Abs(Vector2.Distance(new Vector2(_rndX * _size, _rndY * _size * -1), Player.transform.position));
                 }
             }   
             
-            GameObject randomPrfb = GetRandomPrefab(objTag);
+            GameObject randomPrfb = GetRandomPrefab(objTag , objSize);
 
             if (IsGoodGenerationHelper(randomPrfb))
             {
@@ -138,9 +160,9 @@ public class MapProcGen : MonoBehaviour
 
     private bool IsGoodGenerationHelper(GameObject randomPrfb)
     {
-        List<Vector2> v2List = new List<Vector2>(ProcGen.PrefabSizeDic[randomPrfb.name]);
+        List<Vector2> v2List = new List<Vector2>(ProcGen.PrefabSizeDic[_currentObjSize][randomPrfb.name]);
         int prefabSize = v2List.Count;
-        Vector2 v2 = ProcGen.PrefabSizeDic[randomPrfb.name].ToArray()[0];
+        Vector2 v2 = ProcGen.PrefabSizeDic[_currentObjSize][randomPrfb.name].ToArray()[0];
         int x = (int)v2.x + _rndX;
         int y = (int)v2.y + _rndY;
 
@@ -232,9 +254,8 @@ public class MapProcGen : MonoBehaviour
 
     private void AddPrefabToMap(GameObject randomPrfb , bool IsSolid = true)
     {
-        List<Vector2> v2List = new List<Vector2>(ProcGen.PrefabSizeDic[randomPrfb.name]);
-        int prefabSize = v2List.Count;
-
+        List<Vector2> v2List = new List<Vector2>(ProcGen.PrefabSizeDic[_currentObjSize][randomPrfb.name]);
+     
         foreach(Vector2 v2 in v2List)
         {
             _mapSolidsArr[(int)v2.x + _rndX, (int)v2.y + _rndY] = IsSolid;
@@ -248,9 +269,16 @@ public class MapProcGen : MonoBehaviour
 
 
     // gets an gameObj instan of a random prefab from the dic pool:
-    private GameObject GetRandomPrefab(OBJ_TAG objTag)
+    private GameObject GetRandomPrefab(OBJ_TAG objTag , OBJ_SIZE objSize)
     {
         int rnd = Random.Range(0, ProcGen.PrefabFetcherDic[objTag].Keys.Count);
+        string str = ProcGen.PrefabFetcherDic[objTag].Keys.ToArray()[rnd];
+        while(!ProcGen.PrefabSizeDic[objSize].Keys.Contains(str))
+        {
+            rnd = Random.Range(0, ProcGen.PrefabFetcherDic[objTag].Keys.Count);
+            str = ProcGen.PrefabFetcherDic[objTag].Keys.ToArray()[rnd];
+        }
+
         return ProcGen.PrefabFetcherDic[objTag]
             [ProcGen.PrefabFetcherDic[objTag].Keys.ToArray()[rnd]];
     }
@@ -286,6 +314,21 @@ public interface ProcGen
                         "Rock-monument" ,
                         Resources.Load("Prefabs/Environment/Rock-monument", typeof(GameObject)) as GameObject
                      },
+
+                     {
+                        "Rock" ,
+                        Resources.Load("Prefabs/Environment/Rock", typeof(GameObject)) as GameObject
+                     },
+
+                     {
+                        "Bush" ,
+                        Resources.Load("Prefabs/Environment/Bush", typeof(GameObject)) as GameObject
+                     },
+
+                     {
+                        "Trunk" ,
+                        Resources.Load("Prefabs/Environment/Trunk", typeof(GameObject)) as GameObject
+                     },
               }
         },
 
@@ -311,52 +354,101 @@ public interface ProcGen
         },
 
     };
-    public static readonly Dictionary<string, List<Vector2>> PrefabSizeDic = new Dictionary<string, List<Vector2>>
+
+    public static readonly Dictionary<OBJ_SIZE, Dictionary<string, List<Vector2>>> PrefabSizeDic = new Dictionary<OBJ_SIZE, Dictionary<string, List<Vector2>>>
     {
-         {
-            "Enemy-Default",
-            new List<Vector2>
+        {
+            OBJ_SIZE.SMALL , new Dictionary<string, List<Vector2>>
             {
-                new Vector2(0,0),
+                 {
+                    "Enemy-Default",
+                     new List<Vector2>
+                     {
+                         new Vector2(0,0),
+                     }
+                 },
+
+
+                {
+                    "Border-Default",
+                    new List<Vector2>
+                    {
+                        new Vector2(0,0),
+                    }
+                },
+
+                {
+                    "Rock",
+                    new List<Vector2>
+                    {
+                        new Vector2(0,0),
+                    }
+                },
+
+                {
+                    "Bush",
+                    new List<Vector2>
+                    {
+                        new Vector2(0,0),
+                    }
+                },
+
+                {
+                    "Trunk",
+                    new List<Vector2>
+                    {
+                        new Vector2(0,0),
+                    }
+                },
+            }
+
+        },
+
+        {
+            OBJ_SIZE.MED,new Dictionary<string, List<Vector2>>
+            {
+                {
+                    "Tree-orange",
+                    new List<Vector2>
+                    {
+                        new Vector2(0 , 0),
+                        new Vector2(1 , 0),
+                    }
+                },
+
+                {
+                    "Tree-dried" ,
+                    new List<Vector2>
+                    {
+                        new Vector2(0 , 0),
+                        new Vector2(1 , 0),
+                    }
+                },
             }
         },
 
         {
-            "Tree-orange",
-            new List<Vector2>
+            OBJ_SIZE.LARGE,new Dictionary<string, List<Vector2>>
             {
-                new Vector2(0 , 0),
-                new Vector2(1 , 0),
+                {
+                    "Rock-monument" ,
+                    new List<Vector2>
+                    {
+                          new Vector2(0 , 0),
+                          new Vector2(1 , 0),
+                          new Vector2(2 , 0),
+                          new Vector2(0 , 1),
+                          new Vector2(1 , 1),
+                          new Vector2(2 , 1),
+                    }
+                },
             }
         },
 
-        {
-            "Tree-dried" ,
-            new List<Vector2>
-            {
-                new Vector2(0 , 0),
-            }
-        },
-
-        {
-            "Rock-monument" ,
-            new List<Vector2>
-            {
-                new Vector2(0 , 0),
-                new Vector2(0 , 1),
-                new Vector2(1 , 0),
-                new Vector2(1 , 1),
-            }
-        },
-
-        {
-            "Border-Default",
-            new List<Vector2>
-            {
-                new Vector2(0,0),
-            }
-        },
     };
+
+
+
 }
 
 
@@ -365,4 +457,11 @@ public enum OBJ_TAG
     MAP_OBJ,
     UNIT,
     BORDER,
+}
+
+public enum OBJ_SIZE
+{
+    SMALL,
+    MED,
+    LARGE,
 }
