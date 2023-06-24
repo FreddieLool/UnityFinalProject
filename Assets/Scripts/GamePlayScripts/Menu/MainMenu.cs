@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Advertisements;
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject options;
+    [SerializeField] private GameObject _options;
 
     public void StartGame()
     {
@@ -11,11 +11,11 @@ public class MainMenu : MonoBehaviour
     }
     public void Options()
     {
-        options.SetActive(true);
+        _options.SetActive(true);
     }
     public void Back()
     {
-        options.SetActive(false);
+        _options.SetActive(false);
     }
     public void Quit()
     {

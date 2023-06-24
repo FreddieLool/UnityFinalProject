@@ -8,7 +8,7 @@ using System;
 
 public class ScorePlayer : MonoBehaviour
 {
-    private static float _score = 0;
+    public static float PLAYER_SCORE = 0;
 
     private static Dictionary<SCORE_TYPE, float> _scoreApplier = new Dictionary<SCORE_TYPE, float>
     {
@@ -26,6 +26,11 @@ public class ScorePlayer : MonoBehaviour
     private static float _scoreModifier = 1;
     private static float _scorModAdd = 0.025f;
 
+    private void Awake()
+    {
+        PLAYER_SCORE = 0;
+    }
+
     private void Start()
     {
         _scoreText = GetComponent<TextMeshProUGUI>();
@@ -35,7 +40,7 @@ public class ScorePlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _scoreText.text = $"Score : {(int)_score}";
+        _scoreText.text = $"Score : {(int)PLAYER_SCORE}";
     }
 
     private void FixedUpdate()
@@ -50,7 +55,7 @@ public class ScorePlayer : MonoBehaviour
 
     public static void AddScore(SCORE_TYPE st)
     {
-        _score += (_scoreApplier[st] * _scoreModifier);
+        PLAYER_SCORE += (_scoreApplier[st] * _scoreModifier);
     }
 
 }

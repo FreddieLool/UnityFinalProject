@@ -109,7 +109,14 @@ public class Unit_Handeler : MonoBehaviour
     {
         _collidedUnit.AddXP(_deadUnitXp);
         ScorePlayer.AddScore(SCORE_TYPE.KILL);
-        Destroy(gameObject);
+        if(unit.UnitType == UNIT_TYPE.ENEMY)
+        {
+            Destroy(gameObject);
+        }
+        else if (unit.UnitType == UNIT_TYPE.PLAYER)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
     private void TakeDmg(float enemyDmg)
     {

@@ -53,6 +53,13 @@ public class MapProcGen : MonoBehaviour
     { return x < 0 || y < 0 || x > (_mapWidth - 2) || y > (_mapHeight - 2); }
     //--
 
+    private void Awake()
+    {
+        QualitySettings.vSyncCount = 0;  // VSync must be disabled
+        Application.targetFrameRate = 60;
+        Time.timeScale = 1;
+    }
+
     private void Start()
     {
         Player = GameObject.Find("Player");
