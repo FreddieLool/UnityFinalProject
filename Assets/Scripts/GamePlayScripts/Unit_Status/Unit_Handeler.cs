@@ -54,6 +54,7 @@ public class Unit_Handeler : MonoBehaviour
 
     }
 
+ 
     private void FixedUpdate()
     {
         if(unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill)
@@ -114,8 +115,6 @@ public class Unit_Handeler : MonoBehaviour
             TakeDmg(_collidedUnit.DMG.Value);
             unit.ImmortalTimer.Start();
         }
-
-
     }
 
     private void Die()
@@ -145,6 +144,11 @@ public class Unit_Handeler : MonoBehaviour
             , this.transform.position + new Vector3(0, 1.80f, 0)
             , Quaternion.identity).GetComponent<DamageDeltByUnitText>()
             .ActivateDamageText(damage , this.gameObject , _collidedUnit.AttackRateMill.Value);
+    }
+
+    public void ApplyAdRevive()
+    {
+        unit.HP.Value = 100 + (unit.HP.ValPerLvl * unit.HP.AttLvl);
     }
 }
 

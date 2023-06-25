@@ -46,7 +46,9 @@ public class DamageDeltByUnitText : MonoBehaviour
             yield return new WaitForSecondsRealtime(_animTimeDelay);
         }
         Destroy(this.gameObject);
+        yield break;
     }
+
 
     public void ActivateDamageText(float damage , GameObject perentUnit , float aliveMill)
     {

@@ -50,6 +50,7 @@ public class PlayerUI : MonoBehaviour
         {
             StatsMenu.SetActive(false);
             GameOverMenuUI.SetActive(true);
+            GameOverMenuUI.GetComponent<GameOver>().ApplyGameOver();
         }
     }
 }

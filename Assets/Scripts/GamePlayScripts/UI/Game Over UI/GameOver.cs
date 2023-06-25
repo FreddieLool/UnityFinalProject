@@ -11,16 +11,15 @@ public class GameOver : MonoBehaviour
     [SerializeField] GameObject UiAfterDelay;
     [SerializeField] GameObject GameOverImageGO;
     [SerializeField] GameObject FinalScoreTextGO;
+    [SerializeField] GameObject ReviveButtonGO;
 
-   
 
     private float _done = 0.67f;
     private Image _uiImage;
     private TextMeshProUGUI _finalScoreText;
     private Color _c;
-    private float _a = 0;
 
-    private void Start()
+    public void ApplyGameOver()
     {
         Time.timeScale = 0;
         _uiImage = GameOverImageGO.GetComponent<Image>();
@@ -31,18 +30,21 @@ public class GameOver : MonoBehaviour
         _c = _uiImage.color;
         _finalScoreText.text = $"Final Score : {(int)ScorePlayer.PLAYER_SCORE}";
         StartCoroutine(ScreenFade());
-    }
+    } 
 
     private IEnumerator ScreenFade()
     {
         for(float f = 0; f < _done; f+= 0.01f)
         {
-            _uiImage.color = new Color(_c.r, _c.b, _c.g, _a = f);
+            _uiImage.color = new Color(_c.r, _c.b, _c.g, f);
             yield return new WaitForSecondsRealtime(0.014f);
         }
 
         UiAfterDelay.SetActive(true);
+        ReviveButtonGO.SetActive(false);
     }
+
+
 
     public void ApplyRestart()
     {
