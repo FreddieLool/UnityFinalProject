@@ -57,7 +57,6 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
         Advertisement.Show(_adUnitId, this);
     }
 
-    // Implement the Show Listener's OnUnityAdsShowComplete callback method to determine if the user gets a reward:
     public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
     {
         if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
@@ -65,6 +64,12 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
             Debug.Log("Unity Ads Rewarded Ad Completed");
             // Grant a reward.
         }
+    }
+
+    // returns true or false if ad is completed:
+    public bool OnUnityAdsShowCompleteBool(string adUnitId, UnityAdsShowCompletionState showCompletionState)
+    {
+        return adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED);
     }
 
     // Implement Load and Show Listener error callbacks:
