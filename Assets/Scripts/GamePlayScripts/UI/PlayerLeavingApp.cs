@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class PlayerLeavingApp : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    bool isPaused = false;
+    GameOver gameOver;
+
+    void OnApplicationFocus(bool hasFocus)
     {
-        
+        gameOver.ResumeGame();
+        isPaused = !hasFocus;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnApplicationPause(bool pauseStatus)
     {
-        
+        gameOver.PauseGame();
+        isPaused = pauseStatus;
     }
 }
