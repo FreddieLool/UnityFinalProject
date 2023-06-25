@@ -110,8 +110,6 @@ public class Unit_Handeler : MonoBehaviour
             TakeDmg(_collidedUnit.DMG.Value);
             unit.ImmortalTimer.Start();
         }
-
-
     }
 
     private void Die()

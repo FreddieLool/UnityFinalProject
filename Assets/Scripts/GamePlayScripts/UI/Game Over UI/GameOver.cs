@@ -12,13 +12,12 @@ public class GameOver : MonoBehaviour
     [SerializeField] GameObject GameOverImageGO;
     [SerializeField] GameObject FinalScoreTextGO;
 
-   
+    
 
     private float _done = 0.67f;
     private Image _uiImage;
     private TextMeshProUGUI _finalScoreText;
     private Color _c;
-    private float _a = 0;
 
     private void Start()
     {
@@ -37,12 +36,14 @@ public class GameOver : MonoBehaviour
     {
         for(float f = 0; f < _done; f+= 0.01f)
         {
-            _uiImage.color = new Color(_c.r, _c.b, _c.g, _a = f);
+            _uiImage.color = new Color(_c.r, _c.b, _c.g, f);
             yield return new WaitForSecondsRealtime(0.014f);
         }
 
         UiAfterDelay.SetActive(true);
     }
+
+
 
     public void ApplyRestart()
     {
