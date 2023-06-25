@@ -4,15 +4,17 @@ using UnityEngine;
 using System.Diagnostics;
 using System;
 using System.Linq;
+using UnityEngine.Advertisements;
+
 
 public class Unit_Handeler : MonoBehaviour
 {
     [SerializeField] UNIT_TAG UnitTag; // general unit tag ( diff for each unit )
+    [SerializeField] RewardedAdsButton RewardedAdsButton;
 
     public Unit unit;
     private Unit _collidedUnit;
     private GameObject _unitCanvas;
-
     //for now :
     private float _deadUnitXp = 25;
     private float _totalMill = MapProcGen.GlobalTotalMill + MapProcGen.EnemyXpGainMill;
@@ -48,6 +50,8 @@ public class Unit_Handeler : MonoBehaviour
 
         unit.UpdateUnitByModifier(unit.UnitMod);
         gameObject.GetComponent<SpriteRenderer>().color = unit.UnitColor;
+
+
     }
 
     private void FixedUpdate()
@@ -125,6 +129,7 @@ public class Unit_Handeler : MonoBehaviour
         else if (unit.UnitType == UNIT_TYPE.PLAYER)
         {
             this.gameObject.SetActive(false);
+            RewardedAdsButton.LoadAd();
         }
     }
     private void TakeDmg(float enemyDmg)
