@@ -11,6 +11,7 @@ public class Unit_Handeler : MonoBehaviour
 
     public Unit unit;
     private Unit _collidedUnit;
+    private GameObject _unitCanvas;
 
     //for now :
     private float _deadUnitXp = 25;
@@ -29,6 +30,14 @@ public class Unit_Handeler : MonoBehaviour
 
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
+            _unitCanvas = GameObject.Find("UnitCanvas");
+
+            Instantiate(Resources.Load("Prefabs/Units/HealthBarBackground", typeof(GameObject)) as GameObject
+            , this.transform.position + new Vector3(0, 1.15f, 0)
+            , Quaternion.identity, _unitCanvas.transform).GetComponent<UnitMapHpBar>()
+            .ActivateHpBar(this.gameObject , unit);
+
+
             if (UnityEngine.Random.Range(1, 100) <= _enemyModifiedChance)
             {
                 unit.UnitMod = Unit.UmList[UnityEngine.Random.Range(0, Unit.UmList.Count)];
@@ -121,7 +130,16 @@ public class Unit_Handeler : MonoBehaviour
     private void TakeDmg(float enemyDmg)
     {
         unit.HP.Value -= enemyDmg;
+        AddDamageDealtByUnitText(enemyDmg);
         if (unit.IsDead()) { Die(); }
+    }
+
+    public void AddDamageDealtByUnitText(float damage)
+    { 
+        Instantiate(Resources.Load("Prefabs/Units/DamageDealtByUnit", typeof(GameObject)) as GameObject
+            , this.transform.position + new Vector3(0, 1.80f, 0)
+            , Quaternion.identity).GetComponent<DamageDeltByUnitText>()
+            .ActivateDamageText(damage , this.gameObject , _collidedUnit.AttackRateMill.Value);
     }
 }
 

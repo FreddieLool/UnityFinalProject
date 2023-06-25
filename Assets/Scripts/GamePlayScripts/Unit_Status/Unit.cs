@@ -6,26 +6,44 @@ using System.Linq;
 using System;
 public class Unit
 {
+    // UNIT picker dic :
     public static List<UNIT_MODIFIER> UmList = Enum.GetValues(typeof(UNIT_MODIFIER)).Cast<UNIT_MODIFIER>().ToList();
 
+    // ENUMS :
+    public UNIT_TYPE UnitType { get; set; } // unit type ( player or enemy or whatever ). ( like teams i guess).
+    public UNIT_MODIFIER UnitMod { get; set; } = UNIT_MODIFIER.Normal; // default modifier.
+    public UNIT_TAG UnitTag { get; set; }
+    //--
+
+    // attributes :
+    public bool IsMelee { get; set; }
     public Attribute HP { get; set; }
     public Attribute DMG { get; set; }
-    public bool IsMelee { get; set; }
-    public UNIT_TYPE UnitType { get; set; } // unit type ( player or enemy or whatever ). ( like teams i guess).
-    public Stopwatch ImmortalTimer { get; set; }
-    public float ImmortalMill { get; set; }
-    public Stopwatch AttackRateTimer { get; set; }
-    public Attribute AttackRateMill { get; set; } 
+    public Attribute AttackRateMill { get; set; }
     public Attribute Speed { get; set; }
+
+    //public Attribute HpRegen { get; set; }
+    public List<Attribute> AttList { get; set; }
+    //--
+
+    // stopwatches :
+    public Stopwatch ImmortalTimer { get; set; }
+    public Stopwatch AttackRateTimer { get; set; }
+    //--
+    
+    // level stuff:
     public int Level { get; set; } = 1;
     public float XP { get; set; } = 0;
     public float XpToLevelUp { get; set; } = 100;
-    public List<Attribute> AttList { get; set; }
-    public UNIT_MODIFIER UnitMod { get; set; } = UNIT_MODIFIER.Normal; // default modifier.
-    public UNIT_TAG UnitTag { get; set; }
-    public Color UnitColor { get; set; } = Color.white; // default color.
 
     private static readonly float _lvlUpMod = 1.15f;
+    //--
+
+    // OTHER :
+    public Color UnitColor { get; set; } = Color.white; // default color.
+    public float ImmortalMill { get; set; }
+    //--
+
     public Unit(Attribute hp , Attribute dmg , bool isMelee , UNIT_TYPE unitType , Attribute speed 
         , Attribute attackRateMill , float damageTakenMill)
     {
@@ -105,11 +123,11 @@ public class Unit
             new Unit
                 (
                 new Attribute("HP" , 100 , 15 , 0) 
-                , new Attribute("DMG" , 10 , 2.5f , 0)
+                , new Attribute("DMG" , 17.5f , 2.5f , 0)
                 , false 
                 , UNIT_TYPE.PLAYER 
                 , new Attribute("SPEED" , 5 , 0.4f , 30)
-                , new Attribute("Attack Rate" , 200 , -10 , 12)
+                , new Attribute("Attack Rate" , 420 , -20 , 12)
                 , 500
                 )
         },

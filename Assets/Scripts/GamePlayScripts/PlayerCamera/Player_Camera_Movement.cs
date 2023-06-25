@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player_Camera_Movement : MonoBehaviour
 {
     public Transform Player;
-    public float SmoothSpeed = 0.225f;
+    public float SmoothSpeed = 0.1f;
 
     // IMPORTENT TO HAVE IT BE FixedUpdate !!
     private void FixedUpdate()

@@ -33,7 +33,7 @@ public class GameOver : MonoBehaviour
         StartCoroutine(ScreenFade());
     }
 
-    IEnumerator ScreenFade()
+    private IEnumerator ScreenFade()
     {
         for(float f = 0; f < _done; f+= 0.01f)
         {
