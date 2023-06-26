@@ -13,5 +13,5 @@ public class EnemiesKilled : MonoBehaviour
     { "peculiarBool", true },
 };
     // The ‘myEvent’ event will get queued up and sent every minute
-    AnalyticsService.Instance.CustomData("myEvent", parameters); 
+    //AnalyticsService.Instance.CustomData("myEvent", parameters); 
 }
