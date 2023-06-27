@@ -134,6 +134,7 @@ public class Unit_Handeler : MonoBehaviour
     }
     private void TakeDmg()
     {
+
         float enemyDmg = _collidedUnit.DealDamage();
         unit.HP.Value -= enemyDmg;
         AddDamageDealtByUnitText(enemyDmg);

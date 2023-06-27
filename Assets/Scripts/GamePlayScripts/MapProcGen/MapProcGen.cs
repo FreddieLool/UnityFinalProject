@@ -24,13 +24,16 @@ public class MapProcGen : MonoBehaviour
         _minEnemyResMill = 150,
         _enemyResMillReduc = 2,
         _enemyMinSpawnDistance = 30, // min dist that enemy can spawn from the player.
-        _enemyMaxSpawnDistance = 60;
+        _enemyMaxSpawnDistance = 60,
+        _treasureChestSpawnMill = 15000;
         //_maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map.
 
     private static float _size = 3.375F; // density of the peoc gen ( the less this num is , the more dense object will be to one another).
     private Vector2 _v_size = Vector2.one * _size; // size in Vector2.
 
     private Stopwatch _enemyResTim = new Stopwatch();
+
+    private Stopwatch _chestSpawnTim = new Stopwatch();
 
     private OBJ_SIZE _currentObjSize;
     private OBJ_TAG _currentObjTag;
@@ -64,6 +67,8 @@ public class MapProcGen : MonoBehaviour
     {
         Player = GameObject.Find("Player");
 
+        _chestSpawnTim.Start();
+
         _mapSolidsArr = new bool[_mapWidth, _mapHeight];
         // GENERATING RING OB BORDERS:
         GenerateBorders();
@@ -79,6 +84,11 @@ public class MapProcGen : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(_chestSpawnTim.ElapsedMilliseconds >= _treasureChestSpawnMill)
+        {
+            _chestSpawnTim.Restart();
+            GenerateSomething(OBJ_TAG.CHEST , OBJ_SIZE.SMALL , 1 );
+        }
         if (_enemyResTim.ElapsedMilliseconds >= _enemyResMill)
         {
             GenerateSomething(OBJ_TAG.UNIT, OBJ_SIZE.SMALL , _enemyAmount ,
@@ -369,6 +379,21 @@ public interface ProcGen
             }
         },
 
+         {
+            OBJ_TAG.CHEST, new Dictionary<string, GameObject>
+            {
+                {
+                    "TreasureChest",
+                    Resources.Load("Prefabs/Chest/TreasureChest", typeof(GameObject)) as GameObject
+                },
+
+                {
+                    "TreasureChestClosed",
+                    Resources.Load("Prefabs/Chest/TreasureChestClosed", typeof(GameObject)) as GameObject
+                },
+            }
+        },
+
     };
 
     public static readonly Dictionary<OBJ_SIZE, Dictionary<string, List<Vector2>>> PrefabSizeDic = new Dictionary<OBJ_SIZE, Dictionary<string, List<Vector2>>>
@@ -416,6 +441,15 @@ public interface ProcGen
                         new Vector2(0,0),
                     }
                 },
+
+                {
+                    "TreasureChest",
+                    new List<Vector2>
+                    {
+                        new Vector2(0,0),
+                    }
+                },
+
             }
 
         },
@@ -473,6 +507,7 @@ public enum OBJ_TAG
     MAP_OBJ,
     UNIT,
     BORDER,
+    CHEST,
 }
 
 public enum OBJ_SIZE
