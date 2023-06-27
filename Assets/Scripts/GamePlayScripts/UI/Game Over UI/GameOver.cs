@@ -1,9 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class GameOver : MonoBehaviour
@@ -13,13 +12,13 @@ public class GameOver : MonoBehaviour
     [SerializeField] GameObject FinalScoreTextGO;
     [SerializeField] GameObject ReviveButtonGO;
 
-
+    public int AmountsRevived = 0;
     private float _done = 0.67f;
     private Image _uiImage;
     private TextMeshProUGUI _finalScoreText;
     private Color _c;
 
-    
+
 
     public void ApplyGameOver()
     {
@@ -32,11 +31,11 @@ public class GameOver : MonoBehaviour
         _c = _uiImage.color;
         _finalScoreText.text = $"Final Score : {(int)ScorePlayer.PLAYER_SCORE}";
         StartCoroutine(ScreenFade());
-    } 
+    }
 
     private IEnumerator ScreenFade()
     {
-        for(float f = 0; f < _done; f+= 0.01f)
+        for (float f = 0; f < _done; f += 0.01f)
         {
             _uiImage.color = new Color(_c.r, _c.b, _c.g, f);
             yield return new WaitForSecondsRealtime(0.014f);
@@ -50,10 +49,11 @@ public class GameOver : MonoBehaviour
 
     public void ApplyRestart()
     {
+        AmountsRevived++;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void ApplyMainMenu()
-    {  
+    {
         SceneManager.LoadScene("Main Menu");
     }
 

@@ -16,9 +16,13 @@ public class Unit_Handeler : MonoBehaviour
     private Unit _collidedUnit;
     private GameObject _unitCanvas;
     //for now :
+    public int EnemiesKilled;
     private float _deadUnitXp = 25;
     private float _totalMill = MapProcGen.GlobalTotalMill + MapProcGen.EnemyXpGainMill;
     private static readonly int _enemyModifiedChance = 17;
+
+
+
 
     private void Awake()
     {
@@ -124,6 +128,7 @@ public class Unit_Handeler : MonoBehaviour
         ScorePlayer.AddScore(SCORE_TYPE.KILL);
         if(unit.UnitType == UNIT_TYPE.ENEMY)
         {
+            EnemiesKilled++;
             Destroy(gameObject);
         }
         else if (unit.UnitType == UNIT_TYPE.PLAYER)
