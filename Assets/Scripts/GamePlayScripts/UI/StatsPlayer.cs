@@ -11,6 +11,8 @@ public class StatsPlayer : MonoBehaviour
         DMG,
         AttackRate,
         Speed,
+        Luck,
+        HpRegen,
         Level,
         XP,
         XpTpLevelUp;
@@ -32,6 +34,8 @@ public class StatsPlayer : MonoBehaviour
         DMG = _playerUnit.DMG.Value;
         AttackRate = _playerUnit.AttackRateMill.Value;
         Speed = _playerUnit.Speed.Value;
+        HpRegen = _playerUnit.HpRegen.Value;
+        Luck = _playerUnit.Luck.Value;
         XP = _playerUnit.XP;
         Level = _playerUnit.Level;
         XpTpLevelUp = _playerUnit.XpToLevelUp;
@@ -45,6 +49,8 @@ public class StatsPlayer : MonoBehaviour
             $"Damage : {NiceVal(DMG)} \n\n"+
             $"AttackRate : {NiceVal(AttackRate)} \n\n"+
             $"Speed : {NiceVal(Speed)}\n\n"+
+            $"HpRegen : {NiceVal(HpRegen)}\n\n"+
+            $"Luck : {NiceVal(Luck)}\n\n"+
             $"Level : {NiceVal(Level)}\n\n"+
             $"XP : {NiceVal(XP)} / {NiceVal(XpTpLevelUp)}";
     }

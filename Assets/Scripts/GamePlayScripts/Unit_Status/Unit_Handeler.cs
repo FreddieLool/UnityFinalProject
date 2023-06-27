@@ -29,6 +29,7 @@ public class Unit_Handeler : MonoBehaviour
     void Start()
     {
         unit.ImmortalTimer.Start();
+        unit.RegenTimer.Start();
 
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
@@ -37,8 +38,7 @@ public class Unit_Handeler : MonoBehaviour
             Instantiate(Resources.Load("Prefabs/Units/HealthBarBackground", typeof(GameObject)) as GameObject
             , this.transform.position + new Vector3(0, 1.15f, 0)
             , Quaternion.identity, _unitCanvas.transform).GetComponent<UnitMapHpBar>()
-            .ActivateHpBar(this.gameObject , unit);
-
+            .ActivateHpBar(this.gameObject, unit);
 
             if (UnityEngine.Random.Range(1, 100) <= _enemyModifiedChance)
             {
@@ -47,6 +47,8 @@ public class Unit_Handeler : MonoBehaviour
             unit.AddXP(MapProcGen.TotalEnemyXpGain);
             gameObject.AddComponent<EnemyPathFinding>();
         }
+
+      
 
         unit.UpdateUnitByModifier(unit.UnitMod);
         gameObject.GetComponent<SpriteRenderer>().color = unit.UnitColor;
@@ -57,10 +59,9 @@ public class Unit_Handeler : MonoBehaviour
  
     private void FixedUpdate()
     {
-        if(unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill)
-        {
-            unit.ImmortalTimer.Reset();
-        }
+        if(unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill) { unit.ImmortalTimer.Reset(); }
+        
+        if(unit.RegenTimer.ElapsedMilliseconds >= unit.RegenMill) { unit.RegenTimer.Restart(); unit.HP.Value += unit.HpRegen.Value; }
 
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
@@ -112,7 +113,7 @@ public class Unit_Handeler : MonoBehaviour
             && !unit.ImmortalTimer.IsRunning
             && unit.UnitType != _collidedUnit.UnitType)
         {
-            TakeDmg(_collidedUnit.DMG.Value);
+            TakeDmg();
             unit.ImmortalTimer.Start();
         }
     }
@@ -131,8 +132,9 @@ public class Unit_Handeler : MonoBehaviour
             RewardedAdsButton.LoadAd();
         }
     }
-    private void TakeDmg(float enemyDmg)
+    private void TakeDmg()
     {
+        float enemyDmg = _collidedUnit.DealDamage();
         unit.HP.Value -= enemyDmg;
         AddDamageDealtByUnitText(enemyDmg);
         if (unit.IsDead()) { Die(); }
@@ -143,7 +145,7 @@ public class Unit_Handeler : MonoBehaviour
         Instantiate(Resources.Load("Prefabs/Units/DamageDealtByUnit", typeof(GameObject)) as GameObject
             , this.transform.position + new Vector3(0, 1.80f, 0)
             , Quaternion.identity).GetComponent<DamageDeltByUnitText>()
-            .ActivateDamageText(damage , this.gameObject , _collidedUnit.AttackRateMill.Value);
+            .ActivateDamageText(damage , this.gameObject , _collidedUnit.AttackRateMill.Value , _collidedUnit.DidCrit);
     }
 
     public void ApplyAdRevive()

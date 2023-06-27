@@ -15,6 +15,7 @@ public class DamageDeltByUnitText : MonoBehaviour
     private float _animTimeDelay = 0.015f;
     private float _reduceInCorotine;
 
+    
 
     private void Start()
     {
@@ -50,12 +51,13 @@ public class DamageDeltByUnitText : MonoBehaviour
     }
 
 
-    public void ActivateDamageText(float damage , GameObject perentUnit , float aliveMill)
+    public void ActivateDamageText(float damage , GameObject perentUnit , float aliveMill , bool DidCrit)
     {
         _aliveMill = aliveMill/1000;
         _perentUnit = perentUnit;
         _text = GetComponent<TextMeshPro>();
-        _text.text = damage.ToString();
+        _text.text = StatsPlayer.NiceVal(damage).ToString();
+        if (DidCrit) { _text.color = Color.red; }
         _reduceInCorotine = 1 / (_aliveMill/ _animTimeDelay);
     }
 

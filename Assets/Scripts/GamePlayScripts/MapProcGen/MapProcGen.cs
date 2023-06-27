@@ -20,9 +20,9 @@ public class MapProcGen : MonoBehaviour
         _limit = 333333, // limit on how many tries the procGen methon can try to generate an object.
         _rndX, _rndY, // random cords for the proc gen.
         _enemyAmount = 1, // how much enemies spawn every resMill.
-        _enemyResMill = 950, // amount of time for each enemy to respawn.
+        _enemyResMill = 1950, // amount of time for each enemy to respawn.
         _minEnemyResMill = 150,
-        _enemyResMillReduc = 3,
+        _enemyResMillReduc = 2,
         _enemyMinSpawnDistance = 30, // min dist that enemy can spawn from the player.
         _enemyMaxSpawnDistance = 60;
         //_maxEnemiesOnTheMap = 50; // max amount of enemy units that can be on the map.

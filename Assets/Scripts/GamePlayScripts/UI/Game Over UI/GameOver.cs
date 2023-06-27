@@ -19,6 +19,8 @@ public class GameOver : MonoBehaviour
     private TextMeshProUGUI _finalScoreText;
     private Color _c;
 
+    
+
     public void ApplyGameOver()
     {
         Time.timeScale = 0;

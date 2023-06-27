@@ -21,14 +21,15 @@ public class Unit
     public Attribute DMG { get; set; }
     public Attribute AttackRateMill { get; set; }
     public Attribute Speed { get; set; }
-
-    //public Attribute HpRegen { get; set; }
+    public Attribute HpRegen { get; set; }
+    public Attribute Luck { get; set; }
     public List<Attribute> AttList { get; set; }
     //--
 
     // stopwatches :
     public Stopwatch ImmortalTimer { get; set; }
     public Stopwatch AttackRateTimer { get; set; }
+    public Stopwatch RegenTimer { get; private set; }
     //--
     
     // level stuff:
@@ -36,19 +37,23 @@ public class Unit
     public float XP { get; set; } = 0;
     public float XpToLevelUp { get; set; } = 100;
 
-    private static readonly float _lvlUpMod = 1.15f;
+    private static readonly float _lvlUpMod = 1.115f;
     //--
 
     // OTHER :
     public Color UnitColor { get; set; } = Color.white; // default color.
     public float ImmortalMill { get; set; }
+    public float RegenMill { get; set; } = 1000;
+    public bool DidCrit { get; set; } = false;
     //--
 
     public Unit(Attribute hp , Attribute dmg , bool isMelee , UNIT_TYPE unitType , Attribute speed 
-        , Attribute attackRateMill , float damageTakenMill)
+        , Attribute attackRateMill , float damageTakenMill , Attribute hpRegen , Attribute luck)
     {
         HP = new Attribute(hp);
         DMG = new Attribute(dmg);
+        HpRegen = hpRegen;
+        Luck = luck;
         IsMelee = isMelee;
         UnitType = unitType;
         AttackRateMill = new Attribute(attackRateMill);
@@ -56,12 +61,15 @@ public class Unit
         Speed = new Attribute(speed);
         ImmortalTimer = new Stopwatch();
         AttackRateTimer = new Stopwatch();
+        RegenTimer = new Stopwatch();
         AttList = new List<Attribute>
         {
             HP,
             DMG,
             AttackRateMill,
             Speed,
+            Luck,
+            HpRegen,
         };
     }
 
@@ -69,6 +77,8 @@ public class Unit
     {
         this.HP = new Attribute(other.HP);
         this.DMG = new Attribute(other.DMG);
+        this.HpRegen = new Attribute(other.HpRegen);
+        this.Luck = new Attribute(other.Luck);
         this.IsMelee = other.IsMelee;
         this.UnitType = other.UnitType;
         this.Speed = new Attribute(other.Speed);
@@ -76,12 +86,15 @@ public class Unit
         this.ImmortalMill = other.ImmortalMill;
         ImmortalTimer = new Stopwatch();
         AttackRateTimer = new Stopwatch();
+        RegenTimer = new Stopwatch();
         AttList = new List<Attribute> //DO not change the order!!!
         {
-            HP, /* 0 */
-            DMG, /* 1 */
-            AttackRateMill, /* 2 */
-            Speed, /* 3 */
+            HP,
+            DMG,
+            AttackRateMill,
+            Speed,
+            Luck,
+            HpRegen,
         };
     }
 
@@ -98,6 +111,22 @@ public class Unit
             LevelUp();
         }
     }
+
+    public float DealDamage()
+    {
+        int critChance = 10 + (int)(Luck.Value * 2);
+        float critMod = 125 + (int)(Luck.Value * 5);
+
+        if(UnityEngine.Random.Range(0, 100) <= critChance)
+        {
+            DidCrit = true;
+            return DMG.Value * (critMod / 100);
+        }
+
+        DidCrit = false;
+        return DMG.Value;
+    }
+
 
     // for now (if player upgrades 1 random stat) ( if enemy upgrades all stats a bit)
     public void LevelUp()
@@ -122,13 +151,15 @@ public class Unit
             UNIT_TAG.PLAYER_DEFAULT,
             new Unit
                 (
-                new Attribute("HP" , 100 , 15 , 0) 
+                new Attribute("HP" , 100 , 30 , 0) 
                 , new Attribute("DMG" , 17.5f , 2.5f , 0)
                 , false 
                 , UNIT_TYPE.PLAYER 
                 , new Attribute("SPEED" , 5 , 0.4f , 30)
                 , new Attribute("Attack Rate" , 420 , -20 , 12)
                 , 500
+                , new Attribute("Hp Regen" , 1 , 0.5F , 30)
+                , new Attribute("Luck" , 1 , 1 , 30)
                 )
         },
 
@@ -143,6 +174,8 @@ public class Unit
                 , new Attribute("SPEED" , 5 , 0.05f , 35)
                 , new Attribute("Attack Rate" , 1000 , -10 , 75)
                 , 50
+                , new Attribute("Hp Regen" , 1.1F , 0.25F , 30)
+                , new Attribute("Luck" , 1 , 1 , 30)
                 )
         },
     };
