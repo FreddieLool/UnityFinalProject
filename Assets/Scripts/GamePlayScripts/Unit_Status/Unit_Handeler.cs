@@ -11,10 +11,12 @@ public class Unit_Handeler : MonoBehaviour
 {
     [SerializeField] UNIT_TAG UnitTag; // general unit tag ( diff for each unit )
     [SerializeField] RewardedAdsButton RewardedAdsButton;
+    [SerializeField] EnemyAudioEffects EnemyAudioEffects;
 
     public Unit unit;
     private Unit _collidedUnit;
     private GameObject _unitCanvas;
+    private EnemyAudioEffects _enemyAudioEffects;
     //for now :
     public int EnemiesKilled;
     private float _deadUnitXp = 25;
@@ -28,13 +30,14 @@ public class Unit_Handeler : MonoBehaviour
     {
         unit = new Unit(Unit.UnitGiverDic[UnitTag]);
         unit.UnitTag = this.UnitTag;
+        
     }
 
     void Start()
     {
         unit.ImmortalTimer.Start();
         unit.RegenTimer.Start();
-
+        _enemyAudioEffects = GetComponent<EnemyAudioEffects>();
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
             _unitCanvas = GameObject.Find("GameTextCanvas");
@@ -143,6 +146,14 @@ public class Unit_Handeler : MonoBehaviour
         float enemyDmg = _collidedUnit.DealDamage();
         unit.HP.Value -= enemyDmg;
         AddDamageDealtByUnitText(enemyDmg);
+        if (unit.UnitType == UNIT_TYPE.PLAYER)
+        {
+            _enemyAudioEffects.ZombieAttack();
+        }
+        if(unit.UnitType == UNIT_TYPE.ENEMY)
+        {
+            _enemyAudioEffects.ZombieHit();
+        }
         if (unit.IsDead()) { Die(); }
     }
 
