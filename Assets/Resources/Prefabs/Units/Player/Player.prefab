@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 8667397649212175483}
   - component: {fileID: 8667397649212175473}
   - component: {fileID: -8517987949316108655}
+  - component: {fileID: -4669698450748466390}
   - component: {fileID: 4372510620625388679}
   m_Layer: 0
   m_Name: Player
@@ -187,6 +188,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitTag: 1
+  RewardedAdsButton: {fileID: 0}
+  EnemyAudioEffects: {fileID: -4669698450748466390}
+  EnemiesKilled: 0
+--- !u!114 &-4669698450748466390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8667397649212175482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de94842468026bd458fb705b986c1b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zombieSFX1: {fileID: 8300000, guid: bdb798b20d5ac2f438f3a562f4150019, type: 3}
+  zombieSFX2: {fileID: 8300000, guid: 5ce6bb262e363834db2b5cdef8a21155, type: 3}
+  zombieSFX3: {fileID: 0}
+  src: {fileID: 322320187512442151, guid: 45ad66a09d922d34588bd8dd2bca4685, type: 3}
 --- !u!58 &4372510620625388679
 CircleCollider2D:
   m_ObjectHideFlags: 0
