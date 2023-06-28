@@ -138,9 +138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de94842468026bd458fb705b986c1b3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zombieSFX1: {fileID: 8300000, guid: bdb798b20d5ac2f438f3a562f4150019, type: 3}
-  zombieSFX2: {fileID: 8300000, guid: 5ce6bb262e363834db2b5cdef8a21155, type: 3}
-  zombieSFX3: {fileID: 8300000, guid: d0dd5a8e1fcf88c4c990c0c54c58a2ea, type: 3}
+  zombieHitSFX: {fileID: 8300000, guid: bdb798b20d5ac2f438f3a562f4150019, type: 3}
+  zombieDeathSFX: {fileID: 8300000, guid: 1c737060c75e6564692be2f82d19e3d5, type: 3}
   src: {fileID: 322320187512442151}
 --- !u!60 &2207109165888936644
 PolygonCollider2D:
@@ -237,7 +236,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5ce6bb262e363834db2b5cdef8a21155, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

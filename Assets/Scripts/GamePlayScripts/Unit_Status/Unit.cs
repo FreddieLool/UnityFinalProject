@@ -36,6 +36,7 @@ public class Unit
     public int Level { get; set; } = 1;
     public float XP { get; set; } = 0;
     public float XpToLevelUp { get; set; } = 100;
+    public bool LeveledUp { get; set; } = false;
 
     private static readonly float _lvlUpMod = 1.115f;
     //--
@@ -134,7 +135,9 @@ public class Unit
         XP -= XpToLevelUp;
         Level++;
         XpToLevelUp *= _lvlUpMod;
-        if(UnitType == UNIT_TYPE.PLAYER)
+        LeveledUp = true;
+
+        if (UnitType == UNIT_TYPE.PLAYER)
         {
             AttList[UnityEngine.Random.Range(0, AttList.Count)].AttLvlUpUpgrade();
         }

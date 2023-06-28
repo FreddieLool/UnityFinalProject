@@ -4,25 +4,18 @@ using UnityEngine;
 
 public class EnemyAudioEffects : MonoBehaviour
 {
-    [SerializeField] AudioClip zombieSFX1, zombieSFX2, zombieSFX3;
+    [SerializeField] AudioClip zombieHitSFX, zombieDeathSFX;
     [SerializeField] AudioSource src;
 
     public void ZombieHit()
     {
-        src.clip = zombieSFX1;
+        src.clip = zombieHitSFX;
         src.Play();
     }
 
-
-    public void ZombieAttack()
+    public void ZombieDeath()
     {
-        src.clip = zombieSFX2;
-        src.Play();
-    }
-
-    public void ZombieRandomScream()
-    {
-        src.clip = zombieSFX3;
+        src.clip = zombieDeathSFX;
         src.Play();
     }
 }

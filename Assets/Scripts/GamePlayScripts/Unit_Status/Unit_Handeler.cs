@@ -1,10 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Diagnostics;
-using System;
-using System.Linq;
-using UnityEngine.Advertisements;
 
 
 public class Unit_Handeler : MonoBehaviour
@@ -30,7 +24,7 @@ public class Unit_Handeler : MonoBehaviour
     {
         unit = new Unit(Unit.UnitGiverDic[UnitTag]);
         unit.UnitTag = this.UnitTag;
-        
+
     }
 
     void Start()
@@ -55,7 +49,7 @@ public class Unit_Handeler : MonoBehaviour
             gameObject.AddComponent<EnemyPathFinding>();
         }
 
-      
+
 
         unit.UpdateUnitByModifier(unit.UnitMod);
         gameObject.GetComponent<SpriteRenderer>().color = unit.UnitColor;
@@ -63,12 +57,12 @@ public class Unit_Handeler : MonoBehaviour
 
     }
 
- 
+
     private void FixedUpdate()
     {
-        if(unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill) { unit.ImmortalTimer.Reset(); }
-        
-        if(unit.RegenTimer.ElapsedMilliseconds >= unit.RegenMill) { unit.RegenTimer.Restart(); unit.HP.Value += unit.HpRegen.Value; }
+        if (unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill) { unit.ImmortalTimer.Reset(); }
+
+        if (unit.RegenTimer.ElapsedMilliseconds >= unit.RegenMill) { unit.RegenTimer.Restart(); unit.HP.Value += unit.HpRegen.Value; }
 
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
@@ -93,7 +87,7 @@ public class Unit_Handeler : MonoBehaviour
     {
         _collidedUnit = null;
 
-        if(unit == null)
+        if (unit == null)
         {
             return;
         }
@@ -116,7 +110,7 @@ public class Unit_Handeler : MonoBehaviour
             }
         }
 
-        if (_collidedUnit != null 
+        if (_collidedUnit != null
             && !unit.ImmortalTimer.IsRunning
             && unit.UnitType != _collidedUnit.UnitType)
         {
@@ -129,7 +123,7 @@ public class Unit_Handeler : MonoBehaviour
     {
         _collidedUnit.AddXP(_deadUnitXp);
         ScorePlayer.AddScore(SCORE_TYPE.KILL);
-        if(unit.UnitType == UNIT_TYPE.ENEMY)
+        if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
             EnemiesKilled++;
             Destroy(gameObject);
@@ -146,23 +140,27 @@ public class Unit_Handeler : MonoBehaviour
         float enemyDmg = _collidedUnit.DealDamage();
         unit.HP.Value -= enemyDmg;
         AddDamageDealtByUnitText(enemyDmg);
-        if (unit.UnitType == UNIT_TYPE.PLAYER)
-        {
-            _enemyAudioEffects.ZombieAttack();
-        }
-        if(unit.UnitType == UNIT_TYPE.ENEMY)
+        if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
             _enemyAudioEffects.ZombieHit();
         }
-        if (unit.IsDead()) { Die(); }
+
+        if (unit.IsDead())
+        {
+            if (unit.UnitType == UNIT_TYPE.ENEMY)
+            {
+                _enemyAudioEffects.ZombieDeath();
+            }
+            Die();
+        }
     }
 
     public void AddDamageDealtByUnitText(float damage)
-    { 
+    {
         Instantiate(Resources.Load("Prefabs/Units/DamageDealtByUnit", typeof(GameObject)) as GameObject
             , this.transform.position + new Vector3(0, 1.80f, 0)
             , Quaternion.identity).GetComponent<DamageDeltByUnitText>()
-            .ActivateDamageText(damage , this.gameObject , _collidedUnit.AttackRateMill.Value , _collidedUnit.DidCrit);
+            .ActivateDamageText(damage, this.gameObject, _collidedUnit.AttackRateMill.Value, _collidedUnit.DidCrit);
     }
 
     public void ApplyAdRevive()
