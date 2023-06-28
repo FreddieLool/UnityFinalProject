@@ -37,7 +37,7 @@ public class Unit_Handeler : MonoBehaviour
 
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
-            _unitCanvas = GameObject.Find("UnitCanvas");
+            _unitCanvas = GameObject.Find("GameTextCanvas");
 
             Instantiate(Resources.Load("Prefabs/Units/HealthBarBackground", typeof(GameObject)) as GameObject
             , this.transform.position + new Vector3(0, 1.15f, 0)

@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 74
+  m_SortingOrder: 43
   m_Sprite: {fileID: 1523016412, guid: 07023422a08455d449e4faccb3024021, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CloseChest: {fileID: 4268807751644252901, guid: 3981e446e067a6041a1f5dc7c625fd6d, type: 3}
+  ChestTextGO: {fileID: 6108478154855772946, guid: ee31c64b02e81ec41bc30469736d073d, type: 3}
 --- !u!61 &354778705963331050
 BoxCollider2D:
   m_ObjectHideFlags: 0
