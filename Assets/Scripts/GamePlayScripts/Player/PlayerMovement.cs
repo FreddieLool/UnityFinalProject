@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (GameOver.IsGamePaused) { return; }
+
         // setting up basic movement :
         _movement.x = Input.GetAxisRaw("Horizontal");
         _movement.y = Input.GetAxisRaw("Vertical");
@@ -34,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameOver.IsGamePaused) { return; }
+
         // movement and angle updates once per frame here :
         rb.MovePosition(rb.position + _movement * Speed * Time.fixedDeltaTime);
 

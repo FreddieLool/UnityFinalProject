@@ -28,6 +28,8 @@ public class EnemyPathFinding : MonoBehaviour
     // making  the enemy ai follow the player and change his angle that he will look at the player also :
     private void FixedUpdate()
     {
+        if (GameOver.IsGamePaused) { return; }
+
         // makes enemies despawn when they are alive for a long time +
         // are far away from the player to reduce lag.
         if(_livingTimer.ElapsedMilliseconds >= _livingDuration)

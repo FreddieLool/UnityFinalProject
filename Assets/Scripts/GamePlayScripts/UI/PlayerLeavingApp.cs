@@ -5,17 +5,16 @@ using UnityEngine;
 public class PlayerLeavingApp : MonoBehaviour
 {
     bool isPaused = false;
-    GameOver gameOver;
 
     void OnApplicationFocus(bool hasFocus)
     {
-        gameOver.ResumeGame();
+        GameOver.ResumeGame();
         isPaused = !hasFocus;
     }
 
     void OnApplicationPause(bool pauseStatus)
     {
-        gameOver.PauseGame();
+        GameOver.PauseGame();
         isPaused = pauseStatus;
     }
 }

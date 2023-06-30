@@ -14,11 +14,11 @@ public class ChestText : MonoBehaviour
 
     private IEnumerator thisAnimation()
     {
-        for (float f = 1; f > 0; f -= 0.05f)
+        for (float f = 1; f > 0; f -= 0.025f)
         {
             this.transform.localScale = new Vector3(f, f, 0);
             Text.color = new Color(Text.color.r, Text.color.g, Text.color.b, f);
-            yield return new WaitForSecondsRealtime(0.05f);
+            yield return new WaitForSecondsRealtime(0.025f);
         }
         Destroy(this.gameObject);
         yield break;

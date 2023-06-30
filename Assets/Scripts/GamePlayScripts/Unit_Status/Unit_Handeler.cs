@@ -1,22 +1,22 @@
 using UnityEngine;
-
+using System.Diagnostics;
 
 public class Unit_Handeler : MonoBehaviour
 {
     [SerializeField] UNIT_TAG UnitTag; // general unit tag ( diff for each unit )
     [SerializeField] RewardedAdsButton RewardedAdsButton;
-    [SerializeField] EnemyAudioEffects EnemyAudioEffects;
 
     public Unit unit;
     private Unit _collidedUnit;
     private GameObject _unitCanvas;
-    private EnemyAudioEffects _enemyAudioEffects;
+    private Stopwatch _soundTimer = new Stopwatch();
+  
     //for now :
     public int EnemiesKilled;
     private float _deadUnitXp = 25;
     private float _totalMill = MapProcGen.GlobalTotalMill + MapProcGen.EnemyXpGainMill;
     private static readonly int _enemyModifiedChance = 17;
-
+    private float _soundMill = 950;
 
 
 
@@ -24,14 +24,12 @@ public class Unit_Handeler : MonoBehaviour
     {
         unit = new Unit(Unit.UnitGiverDic[UnitTag]);
         unit.UnitTag = this.UnitTag;
-
     }
 
     void Start()
     {
         unit.ImmortalTimer.Start();
         unit.RegenTimer.Start();
-        _enemyAudioEffects = GetComponent<EnemyAudioEffects>();
         if (unit.UnitType == UNIT_TYPE.ENEMY)
         {
             _unitCanvas = GameObject.Find("GameTextCanvas");
@@ -41,9 +39,9 @@ public class Unit_Handeler : MonoBehaviour
             , Quaternion.identity, _unitCanvas.transform).GetComponent<UnitMapHpBar>()
             .ActivateHpBar(this.gameObject, unit);
 
-            if (UnityEngine.Random.Range(1, 100) <= _enemyModifiedChance)
+            if (Random.Range(1, 100) <= _enemyModifiedChance)
             {
-                unit.UnitMod = Unit.UmList[UnityEngine.Random.Range(0, Unit.UmList.Count)];
+                unit.UnitMod = Unit.UmList[Random.Range(0, Unit.UmList.Count)];
             }
             unit.AddXP(MapProcGen.TotalEnemyXpGain);
             gameObject.AddComponent<EnemyPathFinding>();
@@ -60,6 +58,8 @@ public class Unit_Handeler : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameOver.IsGamePaused) { return; }
+
         if (unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill) { unit.ImmortalTimer.Reset(); }
 
         if (unit.RegenTimer.ElapsedMilliseconds >= unit.RegenMill) { unit.RegenTimer.Restart(); unit.HP.Value += unit.HpRegen.Value; }
@@ -76,10 +76,12 @@ public class Unit_Handeler : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (GameOver.IsGamePaused) { Destroy(gameObject); }
         Combat(collision);
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
+        if (GameOver.IsGamePaused) { Destroy(gameObject); }
         Combat(collision);
     }
 
@@ -136,21 +138,21 @@ public class Unit_Handeler : MonoBehaviour
     }
     private void TakeDmg()
     {
-
         float enemyDmg = _collidedUnit.DealDamage();
         unit.HP.Value -= enemyDmg;
         AddDamageDealtByUnitText(enemyDmg);
-        if (unit.UnitType == UNIT_TYPE.ENEMY)
+        if (unit.UnitType == UNIT_TYPE.ENEMY && (!_soundTimer.IsRunning || _soundTimer.ElapsedMilliseconds >= _soundMill))
         {
-            _enemyAudioEffects.ZombieHit();
+            GameObject usGO = Resources.Load("Prefabs/Units/UnitSoundGO", typeof(GameObject)) as GameObject;
+            Instantiate(usGO, this.transform.position, this.transform.rotation)
+                .GetComponent<UnitSoundScript>()
+                .SetUnit(this.gameObject);
+
+            _soundTimer.Restart();
         }
 
         if (unit.IsDead())
         {
-            if (unit.UnitType == UNIT_TYPE.ENEMY)
-            {
-                _enemyAudioEffects.ZombieDeath();
-            }
             Die();
         }
     }

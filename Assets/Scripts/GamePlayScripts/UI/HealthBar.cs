@@ -11,22 +11,25 @@ public class HealthBar : MonoBehaviour
     {
         _playerUnit = Player.GetComponent<Unit_Handeler>().unit;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (_playerUnit.HP.Value > _maxHP)
         {
-            SetHP();
+            SetMaxHP();
         }
         UpdateHP();
     }
-    private void SetHP()
+    private void SetMaxHP()
     {
         _maxHP = _playerUnit.HP.Value;
         slider.value = _maxHP;
     }
     private void UpdateHP()
     {
-        slider.value = _playerUnit.HP.Value / _maxHP;
+        slider.value = (_playerUnit.HP.Value / _maxHP );
+        float f2 = 0;
+        for (float f = 0.90f;  f > slider.value; f-= 0.10f , f2+= 0.0215f) { }
+        slider.value += f2;
     }
 
 

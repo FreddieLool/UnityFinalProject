@@ -22,7 +22,9 @@ public class PlayerShooting : MonoBehaviour
 
     public void Update()
     {
-        if(_playerUnit.AttackRateTimer.ElapsedMilliseconds >= _playerUnit.AttackRateMill.Value)
+        if (GameOver.IsGamePaused) { return; }
+
+        if (_playerUnit.AttackRateTimer.ElapsedMilliseconds >= _playerUnit.AttackRateMill.Value)
         {
             _playerUnit.AttackRateTimer.Stop();
         }

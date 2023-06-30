@@ -11,8 +11,8 @@ public class MapProcGen : MonoBehaviour
 
     private bool[,] _mapSolidsArr;
     private int
-        _mapWidth = 75, // height of the map.
-        _mapHeight = 65, // width of the map.
+        _mapWidth = 77, // height of the map.
+        _mapHeight = 68, // width of the map.
         _mapSmallObjAmount = 80,
         _mapMedObjAmount = 155,
         _mapLargeObjAmount = 55,
@@ -58,6 +58,7 @@ public class MapProcGen : MonoBehaviour
 
     private void Awake()
     {
+        GameOver.MapProcGenGO = this.gameObject;
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
         Application.targetFrameRate = 60;
         Time.timeScale = 1;

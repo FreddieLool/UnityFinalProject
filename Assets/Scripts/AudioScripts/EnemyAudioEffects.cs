@@ -5,7 +5,8 @@ using UnityEngine;
 public class EnemyAudioEffects : MonoBehaviour
 {
     [SerializeField] AudioClip zombieHitSFX, zombieDeathSFX;
-    [SerializeField] AudioSource src;
+
+    public AudioSource src;
 
     public void ZombieHit()
     {

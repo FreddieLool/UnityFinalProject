@@ -18,6 +18,10 @@ public class GameOver : MonoBehaviour
     private TextMeshProUGUI _finalScoreText;
     private Color _c;
 
+    public static bool IsGamePaused = false;
+
+    public static GameObject MapProcGenGO; 
+    
 
 
     public void ApplyGameOver()
@@ -59,14 +63,16 @@ public class GameOver : MonoBehaviour
 
 
     //FOR NOW!!
-    public void PauseGame()
+    public static void PauseGame()
     {
-        Time.timeScale = 0;
+        MapProcGenGO.SetActive(false);
+        IsGamePaused = true;
     }
 
-    public void ResumeGame()
+    public static void ResumeGame()
     {
-        Time.timeScale = 1;
+        MapProcGenGO.SetActive(true);
+        IsGamePaused = false;
     }
 
 
