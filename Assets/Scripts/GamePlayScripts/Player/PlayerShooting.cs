@@ -6,12 +6,11 @@ using System.Diagnostics;
 
 public class PlayerShooting : MonoBehaviour
 {
-    [SerializeField] UNIT_TAG UnitTag;
     private Unit _playerUnit;
     public Transform ShootingPoint;
     public GameObject bulletPrefab;
     public float BulletForce = 55;
-
+    [SerializeField] GameObject ShootingJoystick;
 
     // attack speed stuff : ( each time shooting timer gets to the mill , player can shoot)
    
@@ -29,7 +28,7 @@ public class PlayerShooting : MonoBehaviour
             _playerUnit.AttackRateTimer.Stop();
         }
 
-        if(Input.GetButton("Fire1") && !_playerUnit.AttackRateTimer.IsRunning)
+        if (ShootingJoystick.transform.localPosition != Vector3.zero && !_playerUnit.AttackRateTimer.IsRunning)
         {
             _playerUnit.AttackRateTimer.Restart();
             Shoot();

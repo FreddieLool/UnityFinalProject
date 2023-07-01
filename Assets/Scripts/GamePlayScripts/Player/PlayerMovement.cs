@@ -4,34 +4,52 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // public stuff :
-    [SerializeField] UNIT_TAG UnitTag;
-    private Unit _unit;
+    //private
+    private Unit _playerUnit;
     private float _rotationSpeed = 590; // the speed of the rotation.
-
-    public float Speed;
-    public Rigidbody2D rb;
-    public Camera Cam;
+    private float _speed;
+    private UnityStandardAssets.CrossPlatformInput.Joystick _joystick;
     // private vectors to get pos:
     Vector2 _movement;
+    Vector2 _lookDir;
     Vector2 _mousePos;
+
+
+    // SerializeField stuff :
+    [SerializeField] GameObject MovingJoystickGO;
+    [SerializeField] GameObject ShootingJoystickGO;
+    [SerializeField] Rigidbody2D rb;
+    [SerializeField] Camera Cam;
+    [SerializeField] bool JoystickMode;
+
 
     private void Start()
     {
-        _unit = Unit.UnitGiverDic[UnitTag];
-        Speed = _unit.Speed.Value;
+        _playerUnit = GetComponent<Unit_Handeler>().unit;
+        _speed = _playerUnit.Speed.Value;
     }
 
     void Update()
     {
         if (GameOver.IsGamePaused) { return; }
 
-        // setting up basic movement :
-        _movement.x = Input.GetAxisRaw("Horizontal");
-        _movement.y = Input.GetAxisRaw("Vertical");
+        if (!JoystickMode)
+        {
+            // setting up basic movement :
+            _movement.x = Input.GetAxisRaw("Horizontal");
+            _movement.y = Input.GetAxisRaw("Vertical");
 
-        // getting current mouse pos :
-        _mousePos = Cam.ScreenToWorldPoint(Input.mousePosition);
+            // getting current mouse pos :
+            _mousePos = Cam.ScreenToWorldPoint(Input.mousePosition);
+
+            _lookDir = _mousePos - rb.position;
+        }
+        if (JoystickMode)
+        {
+            _movement = MovingJoystickGO.transform.localPosition.normalized;
+
+            _lookDir = ShootingJoystickGO.transform.localPosition.normalized;
+        }
     }
 
     private void FixedUpdate()
@@ -39,13 +57,12 @@ public class PlayerMovement : MonoBehaviour
         if (GameOver.IsGamePaused) { return; }
 
         // movement and angle updates once per frame here :
-        rb.MovePosition(rb.position + _movement * Speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + _movement * _speed * Time.fixedDeltaTime);
 
         // getting and applying the angle with mouse pos so the player model can look where the mouse is :
-        // CONVERT TO JOYSTICK LATER !!
-        Vector2 lookDir = _mousePos - rb.position;
-        float trgetAngle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
-        //rb.rotation = angle;
+
+        float trgetAngle = Mathf.Atan2(_lookDir.y, _lookDir.x) * Mathf.Rad2Deg;
+
         rb.rotation = Mathf.MoveTowardsAngle(rb.rotation, trgetAngle, _rotationSpeed * Time.deltaTime);
     }
 }

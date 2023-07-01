@@ -32,7 +32,10 @@ namespace UnityStandardAssets.CrossPlatformInput
 
         void Start()
         {
+			// joystick stuff
             m_StartPos = transform.position;
+			// player stuff :
+
         }
 
 		void UpdateVirtualAxes(Vector3 value)
