@@ -61,11 +61,12 @@ public class MapProcGen : MonoBehaviour
         GameOver.MapProcGenGO = this.gameObject;
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
         Application.targetFrameRate = 60;
-        Time.timeScale = 1;
     }
 
     private void Start()
     {
+        GameOver.ResumeGame();
+
         Player = GameObject.Find("Player");
 
         _chestSpawnTim.Start();
