@@ -26,7 +26,8 @@ public class GameOver : MonoBehaviour
 
     public void ApplyGameOver()
     {
-        Time.timeScale = 0;
+        PauseGame();
+
         _uiImage = GameOverImageGO.GetComponent<Image>();
         _finalScoreText = FinalScoreTextGO.GetComponent<TextMeshProUGUI>();
 

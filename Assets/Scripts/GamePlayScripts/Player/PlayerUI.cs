@@ -46,7 +46,7 @@ public class PlayerUI : MonoBehaviour
         {
             StatsMenu.SetActive(_activateStatsBar);
         }
-        if(_playerUnit.IsDead())
+        if(_playerUnit.IsDead() && !GameOver.IsGamePaused)
         {
             StatsMenu.SetActive(false);
             GameOverMenuUI.SetActive(true);

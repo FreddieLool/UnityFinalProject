@@ -132,8 +132,8 @@ public class Unit_Handeler : MonoBehaviour
         }
         else if (unit.UnitType == UNIT_TYPE.PLAYER)
         {
-            this.gameObject.SetActive(false);
             RewardedAdsButton.LoadAd();
+            this.gameObject.SetActive(false);
         }
     }
     private void TakeDmg()
@@ -168,6 +168,7 @@ public class Unit_Handeler : MonoBehaviour
     public void ApplyAdRevive()
     {
         unit.HP.Value = 100 + (unit.HP.ValPerLvl * unit.HP.AttLvl);
+        GameOver.ResumeGame();
     }
 }
 

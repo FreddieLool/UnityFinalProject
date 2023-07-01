@@ -154,7 +154,7 @@ public class Unit
             UNIT_TAG.PLAYER_DEFAULT,
             new Unit
                 (
-                new Attribute("HP" , 100 , 30 , 0) 
+                new Attribute("HP" , 10 , 30 , 0) 
                 , new Attribute("DMG" , 17.5f , 2.5f , 0)
                 , false 
                 , UNIT_TYPE.PLAYER 
