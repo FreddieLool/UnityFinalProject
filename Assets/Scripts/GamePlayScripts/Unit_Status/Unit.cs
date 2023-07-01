@@ -135,10 +135,10 @@ public class Unit
         XP -= XpToLevelUp;
         Level++;
         XpToLevelUp *= _lvlUpMod;
-        LeveledUp = true;
 
         if (UnitType == UNIT_TYPE.PLAYER)
         {
+            LeveledUp = true;
             AttList[UnityEngine.Random.Range(0, AttList.Count)].AttLvlUpUpgrade();
         }
         if (UnitType == UNIT_TYPE.ENEMY)
