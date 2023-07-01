@@ -2315,7 +2315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b2d645426991fa4d84923799e1323d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _options: {fileID: 0}
+  _options: {fileID: 2059596498}
 --- !u!114 &2134564225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2360,10 +2360,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2134564224}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: Back
-        m_Mode: 1
+      - m_Target: {fileID: 1860123984}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
