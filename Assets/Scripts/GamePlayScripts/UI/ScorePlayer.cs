@@ -40,7 +40,7 @@ public class ScorePlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _scoreText.text = $"Score : {(int)PLAYER_SCORE}";
+        _scoreText.text = $"Score   {(int)PLAYER_SCORE}";
     }
 
     private void FixedUpdate()
