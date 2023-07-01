@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerLeavingApp : MonoBehaviour
@@ -8,13 +6,22 @@ public class PlayerLeavingApp : MonoBehaviour
 
     void OnApplicationFocus(bool hasFocus)
     {
-        GameOver.ResumeGame();
-        isPaused = !hasFocus;
+        if (!hasFocus)
+        {
+            GameOver.PauseGame();
+        }
+        else
+        {
+            GameOver.ResumeGame();
+        }
+
+        //isPaused = !hasFocus;
     }
 
-    void OnApplicationPause(bool pauseStatus)
-    {
-        GameOver.PauseGame();
-        isPaused = pauseStatus;
-    }
+
+    //void OnApplicationPause(bool pauseStatus)
+    //{
+    //    GameOver.PauseGame();
+    //    isPaused = pauseStatus;
+    //}
 }
