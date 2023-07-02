@@ -11,6 +11,41 @@ public class AnalyticsManager : MonoBehaviour
     Unit_Handeler unit_Handeler;
     GameOver gameOver;
 
+    private void Awake()
+    {
+        gameOver = FindObjectOfType<GameOver>();
+        unit_Handeler = GetComponent<Unit_Handeler>();
+    }
+
+
+    async void Start()
+    {
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        Debug.Log("First");
+        await UnityServices.InitializeAsync();
+        Debug.Log("Second");
+        try
+        {
+            List<string> consentIdentifiers = await AnalyticsService.Instance.CheckForRequiredConsents();
+            if (consentIdentifiers.Count > 0)
+            {
+                foreach (string consentIdentifier in consentIdentifiers)
+                {
+                    Debug.Log(consentIdentifier);
+                }
+            }
+            else
+            {
+                Debug.Log("No need for any consent for analytics!");
+            }
+        }
+        catch (ConsentCheckException exception)
+        {
+            Debug.LogError("Expection with checking constents! " + Environment.NewLine + exception.Message);
+        }
+    }
 
     public static AnalyticsManager Instance
     {
@@ -29,7 +64,7 @@ public class AnalyticsManager : MonoBehaviour
 
     public void Update()
     {
-        //ReportAmountsRevived();
+        ReportAmountsRevived();
         ReportEnemiesKilled();
         
     }
@@ -42,11 +77,11 @@ public class AnalyticsManager : MonoBehaviour
         AnalyticsService.Instance.CustomData("howManyKilled", eventParameters);
     }
 
-    //public void ReportAmountsRevived()
-    //{
-    //    Dictionary<string, object> eventParameters = new Dictionary<string, object>();
-    //    eventParameters.Add("AmountsRevived", gameOver.AmountsRevived);
+    public void ReportAmountsRevived()
+    {
+        Dictionary<string, object> eventParameters = new Dictionary<string, object>();
+        eventParameters.Add("AmountsRevived", gameOver.AmountsRevived);
 
-    //    AnalyticsService.Instance.CustomData("AmountsRevived", eventParameters);
-    //}
+        AnalyticsService.Instance.CustomData("AmountsRevived", eventParameters);
+    }
 }
