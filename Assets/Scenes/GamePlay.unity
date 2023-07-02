@@ -1490,6 +1490,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 857694163d31bd245991ec8f00402134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LevelUpPanel: {fileID: 1223031176}
+  GameOverPanel: {fileID: 358278527}
+  PausePanel: {fileID: 2045313312}
 --- !u!1 &358278527
 GameObject:
   m_ObjectHideFlags: 0

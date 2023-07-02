@@ -2,26 +2,23 @@ using UnityEngine;
 
 public class PlayerLeavingApp : MonoBehaviour
 {
-    bool isPaused = false;
+
+    [SerializeField] GameObject LevelUpPanel;
+    [SerializeField] GameObject GameOverPanel;
+    [SerializeField] GameObject PausePanel;
 
     void OnApplicationFocus(bool hasFocus)
     {
-        if (!hasFocus)
+        if (!LevelUpPanel.activeSelf && !GameOverPanel.activeSelf && !PausePanel.activeSelf)
         {
-            GameOver.PauseGame();
+            if (!hasFocus)
+            {
+                GameOver.PauseGame();
+            }
+            else
+            {
+                GameOver.ResumeGame();
+            }
         }
-        else
-        {
-            GameOver.ResumeGame();
-        }
-
-        //isPaused = !hasFocus;
     }
-
-
-    //void OnApplicationPause(bool pauseStatus)
-    //{
-    //    GameOver.PauseGame();
-    //    isPaused = pauseStatus;
-    //}
 }

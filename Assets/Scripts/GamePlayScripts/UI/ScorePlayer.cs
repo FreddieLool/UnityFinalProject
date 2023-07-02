@@ -9,6 +9,7 @@ using System;
 public class ScorePlayer : MonoBehaviour
 {
     public static float PLAYER_SCORE = 0;
+    public static Stopwatch UpdateScoreTimer = new Stopwatch();
 
     private static Dictionary<SCORE_TYPE, float> _scoreApplier = new Dictionary<SCORE_TYPE, float>
     {
@@ -21,7 +22,6 @@ public class ScorePlayer : MonoBehaviour
     };
 
     private static TextMeshProUGUI _scoreText;
-    private static Stopwatch _updateScoreTimer = new Stopwatch();
     private static float _updateScoreMill = 1000;
     private static float _scoreModifier = 1;
     private static float _scorModAdd = 0.025f;
@@ -34,7 +34,7 @@ public class ScorePlayer : MonoBehaviour
     private void Start()
     {
         _scoreText = GetComponent<TextMeshProUGUI>();
-        _updateScoreTimer.Start();
+        UpdateScoreTimer.Start();
     }
 
     // Update is called once per frame
@@ -45,9 +45,9 @@ public class ScorePlayer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(_updateScoreTimer.ElapsedMilliseconds >= _updateScoreMill)
+        if(UpdateScoreTimer.ElapsedMilliseconds >= _updateScoreMill)
         {
-            _updateScoreTimer.Restart();
+            UpdateScoreTimer.Restart();
             _scoreModifier += _scorModAdd;
             AddScore(SCORE_TYPE.PASSIVE);
         }

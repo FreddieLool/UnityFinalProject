@@ -67,12 +67,14 @@ public class GameOver : MonoBehaviour
     public static void PauseGame()
     {
         MapProcGenGO.GetComponent<MapProcGen>().enabled = false;
+        ScorePlayer.UpdateScoreTimer.Stop();
         IsGamePaused = true;
     }
 
     public static void ResumeGame()
     {
         MapProcGenGO.GetComponent<MapProcGen>().enabled = true;
+        ScorePlayer.UpdateScoreTimer.Start();
         IsGamePaused = false;
     }
 
