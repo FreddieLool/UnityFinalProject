@@ -28,7 +28,7 @@ public class PlayerShooting : MonoBehaviour
             _playerUnit.AttackRateTimer.Stop();
         }
 
-        if ((ShootingJoystick.transform.localPosition != Vector3.zero || Input.GetMouseButton(0)) && !_playerUnit.AttackRateTimer.IsRunning)
+        if ((ShootingJoystick.transform.localPosition != Vector3.zero || (!PlayerUI.JOYSTICK_MODE && Input.GetMouseButton(0))) && !_playerUnit.AttackRateTimer.IsRunning)
         {
             _playerUnit.AttackRateTimer.Restart();
             Shoot();
