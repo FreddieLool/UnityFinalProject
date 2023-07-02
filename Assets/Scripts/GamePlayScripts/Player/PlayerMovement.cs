@@ -20,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject ShootingJoystickGO;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] Camera Cam;
-    [SerializeField] bool JoystickMode;
 
 
     private void Start()
@@ -33,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (GameOver.IsGamePaused) { return; }
 
-        if (!JoystickMode)
+        if (!PlayerUI.JOYSTICK_MODE)
         {
             // setting up basic movement :
             _movement.x = Input.GetAxisRaw("Horizontal");
@@ -44,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
             _lookDir = _mousePos - rb.position;
         }
-        if (JoystickMode)
+        if (PlayerUI.JOYSTICK_MODE)
         {
             _movement = MovingJoystickGO.transform.localPosition.normalized;
 
@@ -60,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + _movement * _speed * Time.fixedDeltaTime);
 
         // getting and applying the angle with mouse pos so the player model can look where the mouse is :
+        if(ShootingJoystickGO.transform.localPosition == Vector3.zero) { return; }
 
         float trgetAngle = Mathf.Atan2(_lookDir.y, _lookDir.x) * Mathf.Rad2Deg;
 

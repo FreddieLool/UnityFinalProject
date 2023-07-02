@@ -12,7 +12,9 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] GameObject Pause;
     [SerializeField] GameObject HpBar;
     [SerializeField] GameObject Score;
-    
+    [SerializeField] bool JoystickMode;
+
+    public static bool JOYSTICK_MODE;
 
     private bool
         _activateStatsBar;
@@ -24,6 +26,7 @@ public class PlayerUI : MonoBehaviour
         Pause.SetActive(true);
         HpBar.SetActive(true);
         Score.SetActive(true);
+        JOYSTICK_MODE = JoystickMode;
     }
 
     private void Start()
@@ -35,7 +38,7 @@ public class PlayerUI : MonoBehaviour
     // activate / deactivate the stats bar.
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.I))
+        if (!PlayerUI.JOYSTICK_MODE && Input.GetKeyUp(KeyCode.I))
         {
             _activateStatsBar = !_activateStatsBar;
         }
@@ -44,10 +47,14 @@ public class PlayerUI : MonoBehaviour
     // if its time to enable / disable ( in fixed update ) do it :
     private void FixedUpdate()
     {
-        if(StatsMenu.activeSelf != _activateStatsBar)
+        if (!PlayerUI.JOYSTICK_MODE)
         {
-            StatsMenu.SetActive(_activateStatsBar);
+            if (StatsMenu.activeSelf != _activateStatsBar)
+            {
+                StatsMenu.SetActive(_activateStatsBar);
+            }
         }
+
         if(_playerUnit.IsDead() && !GameOver.IsGamePaused)
         {
             StatsMenu.SetActive(false);

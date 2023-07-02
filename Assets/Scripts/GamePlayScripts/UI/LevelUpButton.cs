@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 
 public class LevelUpButton : MonoBehaviour
 {
-
     public static string ClickedButtonName = "Nun";
     public void ButtonPressed()
     {

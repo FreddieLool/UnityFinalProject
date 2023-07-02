@@ -205,7 +205,7 @@ public class Unit
 
             case UNIT_MODIFIER.DMG_DEALER:
                 DMG.Value *= 3;
-                UnitColor = Color.cyan;
+                UnitColor = Color.black;
                 break;
 
             case UNIT_MODIFIER.FAST_ATTACKER:
@@ -215,7 +215,12 @@ public class Unit
 
             case UNIT_MODIFIER.SPEEDY:
                 Speed.Value *= 1.75f;
-                UnitColor = Color.black;
+                UnitColor = Color.cyan;
+                break;
+
+            case UNIT_MODIFIER.LUCKY:
+                Luck.Value *= 3.5f;
+                UnitColor = Color.magenta;
                 break;
 
             default:
@@ -243,6 +248,7 @@ public enum UNIT_MODIFIER
     SPEEDY,
     FAST_ATTACKER,
     DMG_DEALER,
+    LUCKY,
 }
 
 
