@@ -72,20 +72,16 @@ public class Unit_Handeler : MonoBehaviour
                 Unit.AddXP(MapProcGen.EnemyXpGain);
             }
         }
-        //if (Unit.UnitType == UNIT_TYPE.PLAYER)
-        //{
-        //    Unit.AddXP(5);
-        //}
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (GameOver.IsGamePaused) { Destroy(gameObject); }
+        if (GameOver.IsGamePaused) { return; }
         Combat(collision);
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (GameOver.IsGamePaused) { Destroy(gameObject); }
+        if (GameOver.IsGamePaused) { return; }
         Combat(collision);
     }
 

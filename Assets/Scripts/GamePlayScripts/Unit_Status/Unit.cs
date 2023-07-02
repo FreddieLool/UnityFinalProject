@@ -139,6 +139,7 @@ public class Unit
         if (UnitType == UNIT_TYPE.PLAYER)
         {
             LeveledUp = true;
+            // leveling up random attribute instead of level up panel :
             //AttList[UnityEngine.Random.Range(0, AttList.Count)].AttLvlUpUpgrade();
         }
         if (UnitType == UNIT_TYPE.ENEMY)

@@ -45,8 +45,7 @@ public class Chest : MonoBehaviour
                 return;
             case 2:
                 _textChestStr = $" + {50 + 15 * _playerUnit.Level} XP";
-                _playerUnit.XP += (50 + 15 * _playerUnit.Level);
-                //_playerUnit.AddXP(50 + 15 * _playerUnit.Level);
+                _playerUnit.AddXP(50 + 15 * _playerUnit.Level);
                 return;
             case 3:
                 _textChestStr = $" + {100 + 75 * _playerUnit.Level} SCORE";
