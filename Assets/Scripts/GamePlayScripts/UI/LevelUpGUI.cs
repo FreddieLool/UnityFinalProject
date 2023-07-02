@@ -1,12 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelUpGUI : MonoBehaviour
 {
     Unit playerUnit;
+    [SerializeField] GameObject PlayerObject;
     [SerializeField] GameObject LevelUpPanel;
 
     public TextMeshProUGUI[] Texts;
@@ -14,34 +14,78 @@ public class LevelUpGUI : MonoBehaviour
 
     List<Attribute> threeAtt;
 
+    bool playerPicked = false;
+
+    private void Start()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            buttons[i].onClick.AddListener(PlayerChoosing);
+        }
+        playerUnit = PlayerObject.GetComponent<Unit_Handeler>().unit;
+    }
+
     private void FixedUpdate()
     {
         if (playerUnit.LeveledUp == true)
         {
+            GameOver.PauseGame();
             ApplyLevelUp();
+            PlayerChoosing();
+
+            if (playerPicked)
+            {
+                ApplyUpgrades();
+            }
+            playerUnit.LeveledUp = false;
+            GameOver.ResumeGame();
         }
     }
     public void ApplyLevelUp()
     {
-        List<Attribute> copyAttList = new List<Attribute>();
-        List<Attribute> threeAtt = new List<Attribute>();
-
-        playerUnit.AttList.CopyTo(copyAttList.ToArray(), 0);
+        List<Attribute> copyAttList = new List<Attribute>(playerUnit.AttList);
+        threeAtt = new List<Attribute>();
 
         for (int i = 0; i < 3; i++)
         {
-           threeAtt[i] = copyAttList[Random.Range(0, copyAttList.Count)];
-            Texts[i].text = threeAtt.ToString();
-            copyAttList.RemoveAt(i);
+            int randoNum = Random.Range(0, copyAttList.Count);
+            threeAtt.Add(copyAttList[randoNum]);
+            Texts[i].text = $"Upgrade : {threeAtt[i].Name}";
+            copyAttList.RemoveAt(randoNum);
         }
 
         LevelUpPanel.SetActive(true);
     }
 
+    //public Dictionary<>
 
-    public void TaskOnClick()
+
+    //public int PlayerChose(int value)
+    //{
+    //    return value;
+    //}
+
+
+
+    void PlayerChoosing()
     {
-        
+        while (LevelUpButton.ClickedButtonName == "Nun")
+        {
+
+        }
     }
-    
+
+    void ApplyUpgrades()
+    {
+        foreach (var item in threeAtt)
+        {
+            for (int i = 0; i < playerUnit.AttList.Count; i++)
+            {
+                if (item == playerUnit.AttList[i])
+                {
+                    playerUnit.AttList[i] = item;
+                }
+            }
+        }
+    }
 }

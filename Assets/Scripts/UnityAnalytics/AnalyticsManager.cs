@@ -64,7 +64,7 @@ public class AnalyticsManager : MonoBehaviour
 
     public void Update()
     {
-        ReportAmountsRevived();
+        //ReportAmountsRevived();
         ReportEnemiesKilled();
         
     }
@@ -77,11 +77,11 @@ public class AnalyticsManager : MonoBehaviour
         AnalyticsService.Instance.CustomData("howManyKilled", eventParameters);
     }
 
-    public void ReportAmountsRevived()
-    {
-        Dictionary<string, object> eventParameters = new Dictionary<string, object>();
-        eventParameters.Add("AmountsRevived", gameOver.AmountsRevived);
+    //public void ReportAmountsRevived()
+    //{
+    //    Dictionary<string, object> eventParameters = new Dictionary<string, object>();
+    //    eventParameters.Add("AmountsRevived", gameOver.AmountsRevived);
 
-        AnalyticsService.Instance.CustomData("AmountsRevived", eventParameters);
-    }
+    //    AnalyticsService.Instance.CustomData("AmountsRevived", eventParameters);
+    //}
 }
