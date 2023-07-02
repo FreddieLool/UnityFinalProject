@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        _playerUnit = GetComponent<Unit_Handeler>().unit;
+        _playerUnit = GetComponent<Unit_Handeler>().Unit;
         _speed = _playerUnit.Speed.Value;
     }
 

@@ -24,7 +24,7 @@ public class StatsPlayer : MonoBehaviour
     void Start()
     {
         _stats = GetComponent<TextMeshProUGUI>();
-        _playerUnit = GameObject.Find("Player").GetComponent<Unit_Handeler>().unit;
+        _playerUnit = GameObject.Find("Player").GetComponent<Unit_Handeler>().Unit;
     }
 
     

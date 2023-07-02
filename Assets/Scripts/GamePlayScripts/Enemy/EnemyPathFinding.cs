@@ -21,7 +21,7 @@ public class EnemyPathFinding : MonoBehaviour
     {
         _rb2D = gameObject.GetComponent<Rigidbody2D>();
         _player = GameObject.Find("Player");
-        _unit = gameObject.GetComponent<Unit_Handeler>().unit;
+        _unit = gameObject.GetComponent<Unit_Handeler>().Unit;
         _livingTimer.Start();
     }
 

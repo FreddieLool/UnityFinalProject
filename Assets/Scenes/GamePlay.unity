@@ -1524,7 +1524,7 @@ RectTransform:
   - {fileID: 819104201}
   - {fileID: 1380590203}
   m_Father: {fileID: 1331305510}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2229,6 +2229,7 @@ GameObject:
   - component: {fileID: 504419300}
   - component: {fileID: 504419299}
   - component: {fileID: 504419298}
+  - component: {fileID: 504419302}
   m_Layer: 5
   m_Name: Game UI Menu
   m_TagString: Untagged
@@ -2312,6 +2313,7 @@ RectTransform:
   - {fileID: 2045313313}
   - {fileID: 729267269}
   - {fileID: 776208359}
+  - {fileID: 1223031177}
   - {fileID: 1331305510}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -2321,6 +2323,29 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &504419302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504419297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f0a7951dd0c3a848b59c0a39dcfed82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerObject: {fileID: 1282186753}
+  LevelUpPanel: {fileID: 1223031176}
+  PlayerUI: {fileID: 1331305506}
+  Texts:
+  - {fileID: 142175018}
+  - {fileID: 799305263}
+  - {fileID: 253861099}
+  buttons:
+  - {fileID: 161879467}
+  - {fileID: 462641585}
+  - {fileID: 69249161}
 --- !u!1 &526401274
 GameObject:
   m_ObjectHideFlags: 0
@@ -2357,7 +2382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 90}
   m_SizeDelta: {x: 350, y: 736}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &526401276
@@ -2841,7 +2866,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22401872, guid: 9daa9ea7cbeba394cb3053fe050494af, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 22401872, guid: 9daa9ea7cbeba394cb3053fe050494af, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3188,7 +3213,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1331305510}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -3935,8 +3960,8 @@ RectTransform:
   - {fileID: 161879466}
   - {fileID: 462641584}
   - {fileID: 69249160}
-  m_Father: {fileID: 1331305510}
-  m_RootOrder: 1
+  m_Father: {fileID: 504419301}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4296,7 +4321,6 @@ GameObject:
   - component: {fileID: 1331305508}
   - component: {fileID: 1331305507}
   - component: {fileID: 1331305511}
-  - component: {fileID: 1331305512}
   m_Layer: 5
   m_Name: Player UI Menu
   m_TagString: Untagged
@@ -4378,14 +4402,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 526401275}
-  - {fileID: 1223031177}
   - {fileID: 2111875011}
   - {fileID: 961729432}
   - {fileID: 1232605046}
   - {fileID: 704654704}
   - {fileID: 358278528}
   m_Father: {fileID: 504419301}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4404,34 +4427,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 193d0588eb353894180f28f1a393b981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameUiGO: {fileID: 504419297}
   StatsMenu: {fileID: 526401274}
   GameOverMenuUI: {fileID: 358278527}
   Player: {fileID: 1282186753}
   Pause: {fileID: 310042424}
   HpBar: {fileID: 2111875010}
   Score: {fileID: 961729431}
---- !u!114 &1331305512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331305506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f0a7951dd0c3a848b59c0a39dcfed82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerObject: {fileID: 1282186753}
-  LevelUpPanel: {fileID: 1223031176}
-  Texts:
-  - {fileID: 142175018}
-  - {fileID: 799305263}
-  - {fileID: 253861099}
-  buttons:
-  - {fileID: 161879467}
-  - {fileID: 462641585}
-  - {fileID: 69249161}
 --- !u!1 &1373555556
 GameObject:
   m_ObjectHideFlags: 0
@@ -4813,7 +4815,7 @@ PrefabInstance:
       objectReference: {fileID: 445375989}
     - target: {fileID: 8667397649212175483, guid: 1c4bbc99aa760134e8952f2fc5a1a661, type: 3}
       propertyPath: JoystickMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8667397649212175483, guid: 1c4bbc99aa760134e8952f2fc5a1a661, type: 3}
       propertyPath: MovingJoystickGO
@@ -5604,7 +5606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22401872, guid: 9daa9ea7cbeba394cb3053fe050494af, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 22401872, guid: 9daa9ea7cbeba394cb3053fe050494af, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6442,7 +6444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4500706468547442982, guid: 8464baa637259974e80d1cce0612c563, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4500706468547442982, guid: 8464baa637259974e80d1cce0612c563, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6533,6 +6535,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5106400180505678692, guid: 8414ace5d51f1174193e8b7520129b74, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5106400181388521616, guid: 8414ace5d51f1174193e8b7520129b74, type: 3}
       propertyPath: m_Name
       value: Grid

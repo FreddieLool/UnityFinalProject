@@ -16,7 +16,7 @@ public class PlayerShooting : MonoBehaviour
    
     public void Start()
     {
-        _playerUnit = GetComponent<Unit_Handeler>().unit;
+        _playerUnit = GetComponent<Unit_Handeler>().Unit;
     }
 
     public void Update()
@@ -28,7 +28,7 @@ public class PlayerShooting : MonoBehaviour
             _playerUnit.AttackRateTimer.Stop();
         }
 
-        if (ShootingJoystick.transform.localPosition != Vector3.zero && !_playerUnit.AttackRateTimer.IsRunning)
+        if ((ShootingJoystick.transform.localPosition != Vector3.zero || Input.GetMouseButton(0)) && !_playerUnit.AttackRateTimer.IsRunning)
         {
             _playerUnit.AttackRateTimer.Restart();
             Shoot();

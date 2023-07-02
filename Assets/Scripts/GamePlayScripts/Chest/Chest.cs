@@ -18,7 +18,7 @@ public class Chest : MonoBehaviour
     {
         _playeGO = GameObject.Find("Player");
         _chestTextCanvasGO = GameObject.Find("GameTextCanvas");
-        _playerUnit = _playeGO.GetComponent<Unit_Handeler>().unit;
+        _playerUnit = _playeGO.GetComponent<Unit_Handeler>().Unit;
         _text = _chestTextCanvasGO.GetComponent<TextMeshPro>();
     }
     private void OnTriggerEnter2D(Collider2D collision)

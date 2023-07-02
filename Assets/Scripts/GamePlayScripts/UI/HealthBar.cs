@@ -9,7 +9,7 @@ public class HealthBar : MonoBehaviour
     private float _maxHP = 0;
     private void Start()
     {
-        _playerUnit = Player.GetComponent<Unit_Handeler>().unit;
+        _playerUnit = Player.GetComponent<Unit_Handeler>().Unit;
     }
     private void FixedUpdate()
     {

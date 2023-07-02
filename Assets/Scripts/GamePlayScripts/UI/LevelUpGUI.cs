@@ -5,45 +5,36 @@ using UnityEngine.UI;
 
 public class LevelUpGUI : MonoBehaviour
 {
-    Unit playerUnit;
+    private Unit _playerUnit;
     [SerializeField] GameObject PlayerObject;
     [SerializeField] GameObject LevelUpPanel;
+    [SerializeField] GameObject PlayerUI;
 
     public TextMeshProUGUI[] Texts;
     public Button[] buttons;
 
     List<Attribute> threeAtt;
 
-    bool playerPicked = false;
-
     private void Start()
     {
-        for (int i = 0; i < 3; i++)
-        {
-            buttons[i].onClick.AddListener(PlayerChoosing);
-        }
-        playerUnit = PlayerObject.GetComponent<Unit_Handeler>().unit;
+        _playerUnit = PlayerObject.GetComponent<Unit_Handeler>().Unit;
+    }
+
+    public void ActivateLevelUp()
+    {
+        ApplyLevelUp();
     }
 
     private void FixedUpdate()
     {
-        if (playerUnit.LeveledUp == true)
-        {
-            GameOver.PauseGame();
-            ApplyLevelUp();
-            PlayerChoosing();
-
-            if (playerPicked)
-            {
-                ApplyUpgrades();
-            }
-            playerUnit.LeveledUp = false;
-            GameOver.ResumeGame();
-        }
+        PlayerChoosing();
     }
+
     public void ApplyLevelUp()
     {
-        List<Attribute> copyAttList = new List<Attribute>(playerUnit.AttList);
+        GameOver.PauseGame();
+        _playerUnit.LeveledUp = false;
+        List<Attribute> copyAttList = new List<Attribute>(_playerUnit.AttList);
         threeAtt = new List<Attribute>();
 
         for (int i = 0; i < 3; i++)
@@ -54,24 +45,20 @@ public class LevelUpGUI : MonoBehaviour
             copyAttList.RemoveAt(randoNum);
         }
 
+        PlayerUI.SetActive(false);
         LevelUpPanel.SetActive(true);
     }
 
-    //public Dictionary<>
-
-
-    //public int PlayerChose(int value)
-    //{
-    //    return value;
-    //}
-
-
-
     void PlayerChoosing()
     {
-        while (LevelUpButton.ClickedButtonName == "Nun")
+        if(LevelUpButton.ClickedButtonName != "Nun") 
         {
-
+            threeAtt[int.Parse(LevelUpButton.ClickedButtonName)].AttLvlUpUpgrade();
+            ApplyUpgrades();
+            LevelUpButton.ClickedButtonName = "Nun";
+            LevelUpPanel.SetActive(false);
+            PlayerUI.SetActive(true);
+            GameOver.ResumeGame();
         }
     }
 
@@ -79,11 +66,11 @@ public class LevelUpGUI : MonoBehaviour
     {
         foreach (var item in threeAtt)
         {
-            for (int i = 0; i < playerUnit.AttList.Count; i++)
+            for (int i = 0; i < _playerUnit.AttList.Count; i++)
             {
-                if (item == playerUnit.AttList[i])
+                if (item == _playerUnit.AttList[i])
                 {
-                    playerUnit.AttList[i] = item;
+                    _playerUnit.AttList[i] = item;
                 }
             }
         }

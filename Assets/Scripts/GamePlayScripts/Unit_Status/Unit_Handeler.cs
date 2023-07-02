@@ -6,7 +6,7 @@ public class Unit_Handeler : MonoBehaviour
     [SerializeField] UNIT_TAG UnitTag; // general unit tag ( diff for each unit )
     [SerializeField] RewardedAdsButton RewardedAdsButton;
 
-    public Unit unit;
+    public Unit Unit;
     private Unit _collidedUnit;
     private GameObject _unitCanvas;
     private Stopwatch _soundTimer = new Stopwatch();
@@ -22,35 +22,35 @@ public class Unit_Handeler : MonoBehaviour
 
     private void Awake()
     {
-        unit = new Unit(Unit.UnitGiverDic[UnitTag]);
-        unit.UnitTag = this.UnitTag;
+        Unit = new Unit(Unit.UnitGiverDic[UnitTag]);
+        Unit.UnitTag = this.UnitTag;
     }
 
     void Start()
     {
-        unit.ImmortalTimer.Start();
-        unit.RegenTimer.Start();
-        if (unit.UnitType == UNIT_TYPE.ENEMY)
+        Unit.ImmortalTimer.Start();
+        Unit.RegenTimer.Start();
+        if (Unit.UnitType == UNIT_TYPE.ENEMY)
         {
             _unitCanvas = GameObject.Find("GameTextCanvas");
 
             Instantiate(Resources.Load("Prefabs/Units/HealthBarBackground", typeof(GameObject)) as GameObject
             , this.transform.position + new Vector3(0, 1.15f, 0)
             , Quaternion.identity, _unitCanvas.transform).GetComponent<UnitMapHpBar>()
-            .ActivateHpBar(this.gameObject, unit);
+            .ActivateHpBar(this.gameObject, Unit);
 
             if (Random.Range(1, 100) <= _enemyModifiedChance)
             {
-                unit.UnitMod = Unit.UmList[Random.Range(0, Unit.UmList.Count)];
+                Unit.UnitMod = Unit.UmList[Random.Range(0, Unit.UmList.Count)];
             }
-            unit.AddXP(MapProcGen.TotalEnemyXpGain);
+            Unit.AddXP(MapProcGen.TotalEnemyXpGain);
             gameObject.AddComponent<EnemyPathFinding>();
         }
 
 
 
-        unit.UpdateUnitByModifier(unit.UnitMod);
-        gameObject.GetComponent<SpriteRenderer>().color = unit.UnitColor;
+        Unit.UpdateUnitByModifier(Unit.UnitMod);
+        gameObject.GetComponent<SpriteRenderer>().color = Unit.UnitColor;
 
 
     }
@@ -60,16 +60,16 @@ public class Unit_Handeler : MonoBehaviour
     {
         if (GameOver.IsGamePaused) { return; }
 
-        if (unit.ImmortalTimer.ElapsedMilliseconds >= unit.ImmortalMill) { unit.ImmortalTimer.Reset(); }
+        if (Unit.ImmortalTimer.ElapsedMilliseconds >= Unit.ImmortalMill) { Unit.ImmortalTimer.Reset(); }
 
-        if (unit.RegenTimer.ElapsedMilliseconds >= unit.RegenMill) { unit.RegenTimer.Restart(); unit.HP.Value += unit.HpRegen.Value; }
+        if (Unit.RegenTimer.ElapsedMilliseconds >= Unit.RegenMill) { Unit.RegenTimer.Restart(); Unit.HP.Value += Unit.HpRegen.Value; }
 
-        if (unit.UnitType == UNIT_TYPE.ENEMY)
+        if (Unit.UnitType == UNIT_TYPE.ENEMY)
         {
             if (MapProcGen.EnemyXpGainTimer.ElapsedMilliseconds >= _totalMill)
             {
                 _totalMill += MapProcGen.EnemyXpGainMill;
-                unit.AddXP(MapProcGen.EnemyXpGain);
+                Unit.AddXP(MapProcGen.EnemyXpGain);
             }
         }
     }
@@ -89,7 +89,7 @@ public class Unit_Handeler : MonoBehaviour
     {
         _collidedUnit = null;
 
-        if (unit == null)
+        if (Unit == null)
         {
             return;
         }
@@ -97,10 +97,10 @@ public class Unit_Handeler : MonoBehaviour
         {
             Unit_Handeler collidedUnitHandeler = collision.gameObject.GetComponent<Unit_Handeler>();
 
-            if (collision.gameObject.GetComponent<Unit_Handeler>().unit != null &&
-                collidedUnitHandeler.unit.IsMelee)
+            if (collision.gameObject.GetComponent<Unit_Handeler>().Unit != null &&
+                collidedUnitHandeler.Unit.IsMelee)
             {
-                _collidedUnit = collidedUnitHandeler.unit;
+                _collidedUnit = collidedUnitHandeler.Unit;
             }
         }
         else
@@ -108,16 +108,16 @@ public class Unit_Handeler : MonoBehaviour
             if (collision.gameObject.GetComponent<Bullet>() != null)
             {
                 _collidedUnit = collision.gameObject.GetComponent<Bullet>()
-                    .Owner.GetComponent<Unit_Handeler>().unit;
+                    .Owner.GetComponent<Unit_Handeler>().Unit;
             }
         }
 
         if (_collidedUnit != null
-            && !unit.ImmortalTimer.IsRunning
-            && unit.UnitType != _collidedUnit.UnitType)
+            && !Unit.ImmortalTimer.IsRunning
+            && Unit.UnitType != _collidedUnit.UnitType)
         {
             TakeDmg();
-            unit.ImmortalTimer.Start();
+            Unit.ImmortalTimer.Start();
         }
     }
 
@@ -125,12 +125,12 @@ public class Unit_Handeler : MonoBehaviour
     {
         _collidedUnit.AddXP(_deadUnitXp);
         ScorePlayer.AddScore(SCORE_TYPE.KILL);
-        if (unit.UnitType == UNIT_TYPE.ENEMY)
+        if (Unit.UnitType == UNIT_TYPE.ENEMY)
         {
             EnemiesKilled++;
             Destroy(gameObject);
         }
-        else if (unit.UnitType == UNIT_TYPE.PLAYER)
+        else if (Unit.UnitType == UNIT_TYPE.PLAYER)
         {
             RewardedAdsButton.LoadAd();
             this.gameObject.SetActive(false);
@@ -139,9 +139,9 @@ public class Unit_Handeler : MonoBehaviour
     private void TakeDmg()
     {
         float enemyDmg = _collidedUnit.DealDamage();
-        unit.HP.Value -= enemyDmg;
+        Unit.HP.Value -= enemyDmg;
         AddDamageDealtByUnitText(enemyDmg);
-        if (unit.UnitType == UNIT_TYPE.ENEMY && (!_soundTimer.IsRunning || _soundTimer.ElapsedMilliseconds >= _soundMill))
+        if (Unit.UnitType == UNIT_TYPE.ENEMY && (!_soundTimer.IsRunning || _soundTimer.ElapsedMilliseconds >= _soundMill))
         {
             GameObject usGO = Resources.Load("Prefabs/Units/UnitSoundGO", typeof(GameObject)) as GameObject;
             Instantiate(usGO, this.transform.position, this.transform.rotation)
@@ -151,7 +151,7 @@ public class Unit_Handeler : MonoBehaviour
             _soundTimer.Restart();
         }
 
-        if (unit.IsDead())
+        if (Unit.IsDead())
         {
             Die();
         }
@@ -167,7 +167,7 @@ public class Unit_Handeler : MonoBehaviour
 
     public void ApplyAdRevive()
     {
-        unit.HP.Value = 100 + (unit.HP.ValPerLvl * unit.HP.AttLvl);
+        Unit.HP.Value = 100 + (Unit.HP.ValPerLvl * Unit.HP.AttLvl);
         GameOver.ResumeGame();
     }
 }

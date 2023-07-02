@@ -5,12 +5,14 @@ using TMPro;
 
 public class PlayerUI : MonoBehaviour
 {
+    [SerializeField] GameObject GameUiGO;
     [SerializeField] GameObject StatsMenu;
     [SerializeField] GameObject GameOverMenuUI;
     [SerializeField] GameObject Player;
     [SerializeField] GameObject Pause;
     [SerializeField] GameObject HpBar;
     [SerializeField] GameObject Score;
+    
 
     private bool
         _activateStatsBar;
@@ -26,7 +28,7 @@ public class PlayerUI : MonoBehaviour
 
     private void Start()
     {
-        _playerUnit = Player.GetComponent<Unit_Handeler>().unit;
+        _playerUnit = Player.GetComponent<Unit_Handeler>().Unit;
     }
 
     // getting ( in update for max response rate ) if the button is pressed . if so ,
@@ -51,6 +53,10 @@ public class PlayerUI : MonoBehaviour
             StatsMenu.SetActive(false);
             GameOverMenuUI.SetActive(true);
             GameOverMenuUI.GetComponent<GameOver>().ApplyGameOver();
+        }
+        if (_playerUnit.LeveledUp)
+        {
+            GameUiGO.GetComponent<LevelUpGUI>().ActivateLevelUp();
         }
     }
 }
