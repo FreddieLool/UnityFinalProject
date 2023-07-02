@@ -28,14 +28,13 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnEnable()
 		{
 			CreateVirtualAxes();
+			transform.localPosition = Vector2.zero;
 		}
 
         void Start()
         {
 			// joystick stuff
             m_StartPos = transform.position;
-			// player stuff :
-
         }
 
 		void UpdateVirtualAxes(Vector3 value)
@@ -76,25 +75,9 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		public void OnDrag(PointerEventData data)
 		{
-			//Vector3 newPos = Vector3.zero;
-
 			Vector3 newPos = new Vector2((int)(data.position.x - m_StartPos.x) , (int)(data.position.y - m_StartPos.y));
 			newPos = Vector2.ClampMagnitude(newPos , MovementRange);
 
-			//if (m_UseX)
-			//{
-			//	int delta = (int)(data.position.x - m_StartPos.x);
-			//	Vector2.ClampMagnitude(delta, MovementRange);
-			//	delta = Mathf.Clamp(delta, - MovementRange, MovementRange);
-			//	newPos.x = delta;
-			//}
-
-			//if (m_UseY)
-			//{
-			//	int delta = (int)(data.position.y - m_StartPos.y);
-			//	delta = Mathf.Clamp(delta, -MovementRange, MovementRange);
-			//	newPos.y = delta;
-			//}
 			transform.position = new Vector3(m_StartPos.x + newPos.x, m_StartPos.y + newPos.y, m_StartPos.z + newPos.z);
 			UpdateVirtualAxes(transform.position);
 		}
