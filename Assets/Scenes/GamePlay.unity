@@ -2766,7 +2766,7 @@ MonoBehaviour:
   Pause: {fileID: 310042424}
   HpBar: {fileID: 2111875010}
   Score: {fileID: 961729431}
-  JoystickMode: 0
+  JoystickMode: 1
 --- !u!1 &1612211252
 GameObject:
   m_ObjectHideFlags: 0
@@ -3942,7 +3942,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 931523334792865100, guid: cc5d18bd8243ff540913bff770959853, type: 3}
   m_PrefabInstance: {fileID: 931523335923470059}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 931523335923470060}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -4029,6 +4029,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 1331305510}
     m_Modifications:
     - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1282186753}
@@ -4036,6 +4044,30 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1648028200}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Target
+      value: 
+      objectReference: {fileID: 931523335923470060}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 931523335997398104, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 931523336246029163, guid: cc5d18bd8243ff540913bff770959853, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4124,8 +4156,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Over Menu UI
       objectReference: {fileID: 0}
+    - target: {fileID: 931523336246029204, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+--- !u!1 &931523335923470060 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 931523334792865102, guid: cc5d18bd8243ff540913bff770959853, type: 3}
+  m_PrefabInstance: {fileID: 931523335923470059}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3780535383944633134
 PrefabInstance:
   m_ObjectHideFlags: 0
