@@ -8,18 +8,16 @@ using UnityEngine.SceneManagement;
 
 public class AnalyticsManager : MonoBehaviour
 {
+    [SerializeField] GameObject PlayerObject;
+    [SerializeField] GameObject GameOverUI;
     Unit_Handeler unit_Handeler;
     GameOver gameOver;
-
-    private void Awake()
-    {
-        gameOver = FindObjectOfType<GameOver>();
-        unit_Handeler = GetComponent<Unit_Handeler>();
-    }
 
 
     async void Start()
     {
+        unit_Handeler = PlayerObject.GetComponent<Unit_Handeler>();
+        gameOver = GameOverUI.GetComponent<GameOver>();
 
         instance = this;
         DontDestroyOnLoad(gameObject);
@@ -64,7 +62,7 @@ public class AnalyticsManager : MonoBehaviour
 
     public void Update()
     {
-        //ReportAmountsRevived();
+        ReportAmountsRevived();
         ReportEnemiesKilled();
         
     }
@@ -77,11 +75,11 @@ public class AnalyticsManager : MonoBehaviour
         AnalyticsService.Instance.CustomData("howManyKilled", eventParameters);
     }
 
-    //public void ReportAmountsRevived()
-    //{
-    //    Dictionary<string, object> eventParameters = new Dictionary<string, object>();
-    //    eventParameters.Add("AmountsRevived", gameOver.AmountsRevived);
+    public void ReportAmountsRevived()
+    {
+        Dictionary<string, object> eventParameters = new Dictionary<string, object>();
+        eventParameters.Add("AmountsRevived", gameOver.AmountsRevived);
 
-    //    AnalyticsService.Instance.CustomData("AmountsRevived", eventParameters);
-    //}
+        AnalyticsService.Instance.CustomData("AmountsRevived", eventParameters);
+    }
 }
