@@ -2307,7 +2307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e233f4878c01e04cb9f6c897b4e123e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 8667397649212175482, guid: 1c4bbc99aa760134e8952f2fc5a1a661, type: 3}
+  player: {fileID: 1282186753}
   enemy: {fileID: 2307889262365527728, guid: 45ad66a09d922d34588bd8dd2bca4685, type: 3}
   inputField: {fileID: 528426925}
 --- !u!1 &1037876212
@@ -2766,7 +2766,7 @@ MonoBehaviour:
   Pause: {fileID: 310042424}
   HpBar: {fileID: 2111875010}
   Score: {fileID: 961729431}
-  JoystickMode: 1
+  JoystickMode: 0
 --- !u!1 &1612211252
 GameObject:
   m_ObjectHideFlags: 0
